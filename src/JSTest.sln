@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JSTest", "JSTest\JSTest.csproj", "{5E773EC0-72BA-44B9-90AB-2B16D30349B1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JSTest.Test", "JSTest.Test\JSTest.Test.csproj", "{43F93A00-388E-4235-AFC0-C139E37BB887}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{44EFA1CD-63A8-4CFD-8B4E-09F86F583648}"
+	ProjectSection(SolutionItems) = preProject
+		build.proj = build.proj
+		nuget.config = nuget.config
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{B9BCCB4A-A10B-4433-AED9-49C3FE46897D}"
+	ProjectSection(SolutionItems) = preProject
+		Shared\ProductInfo.cs = Shared\ProductInfo.cs
+		Shared\VersionInfo.cs = Shared\VersionInfo.cs
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5E773EC0-72BA-44B9-90AB-2B16D30349B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E773EC0-72BA-44B9-90AB-2B16D30349B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E773EC0-72BA-44B9-90AB-2B16D30349B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E773EC0-72BA-44B9-90AB-2B16D30349B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43F93A00-388E-4235-AFC0-C139E37BB887}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43F93A00-388E-4235-AFC0-C139E37BB887}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43F93A00-388E-4235-AFC0-C139E37BB887}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43F93A00-388E-4235-AFC0-C139E37BB887}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
