@@ -4,18 +4,18 @@
   <UsingTask TaskName="Xunit.Runner.MSBuild.xunit" AssemblyFile="..\lib\MSBuild\xUnit\xunit.runner.msbuild.dll" />
 
   <PropertyGroup>
-    
+
     <BuildOutput>..\build</BuildOutput>
-    
+
     <Platform Condition="'$(Platform)' == ''">Any CPU</Platform>
     <Configuration Condition="'$(Configuration)' == ''">Release</Configuration>
     <BuildVersion Condition="'$(BuildVersion)' == ''">0.0.0.0</BuildVersion>
     <MSpecOptions Condition="'$(MSpecOptions)' == ''"></MSpecOptions>
-    
+
     <NuGetBootstrapper>..\.nuget\nuget-bootstrap.exe</NuGetBootstrapper>
     <NuGetPackages>..\packages</NuGetPackages>
     <NuGet>..\.nuget\nuget.exe</NuGet>
-    
+
   </PropertyGroup>
 
   <Target Name="InstallNuGet" Condition="!Exists('$(NuGet)')">
@@ -28,19 +28,19 @@
     <ItemGroup>
       <PackageConfigFiles Include="**\packages.config" />
     </ItemGroup>
-    
+
     <Exec Command="$(NuGet) install %(PackageConfigFiles.Identity) -o $(NuGetPackages)" />
   </Target>
 
   <Target Name="Clean">
     <ItemGroup>
-      <CleanFiles Include="$(BuildOutput)" />
       <CleanFiles Include="**\bin\$(Configuration)\**" />
       <CleanFiles Include="**\bin\*.*" />
       <CleanFiles Include="**\obj\$(Configuration)\**" />
       <CleanFiles Include="**\obj\*.*" />
     </ItemGroup>
 
+    <RemoveDir Directories="$(BuildOutput)" ContinueOnError="true"/>
     <Delete Files="@(CleanFiles)" />
   </Target>
 
@@ -60,6 +60,16 @@
     </ItemGroup>
 
     <xunit Assembly="%(TestProjects.Identity)" />
+  </Target>
+
+  <Target Name="Package" DependsOnTargets="Test">
+    <Copy SourceFiles="..\.nuget\JSTest.dll.nuspec" DestinationFolder="$(BuildOutput)"></Copy>
+    <Copy SourceFiles="JSTest\bin\$(Configuration)\JSTest.dll" DestinationFolder="$(BuildOutput)\lib"></Copy>
+
+    <XmlUpdate XmlFileName="$(BuildOutput)\JSTest.dll.nuspec" Xpath="//package/metadata/version/text()" Value="$(BuildVersion)" />
+    
+    <Exec Command="$(NuGet) update -self" />
+    <Exec Command="$(NuGet) pack $(BuildOutput)\JSTest.dll.nuspec -OutputDirectory $(BuildOutput)" />
   </Target>
 
 </Project>
