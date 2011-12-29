@@ -21,10 +21,11 @@ namespace JSTest.ScriptElements
     private const String UnformattedScriptBlock = @"(function () {{
   try {{
     WScript.Echo(JSON.stringify((function () {{
-      debugger;
+      {0}
       // START TEST BLOCK //
-{0}
+{1}
       // END TEST BLOCK //
+      
       return null;
     }})()));
     WScript.Quit(0);
@@ -36,7 +37,11 @@ namespace JSTest.ScriptElements
 }})();";
 
     public TestExecutor(String scriptBlock)
-      : base(String.Format(UnformattedScriptBlock, scriptBlock))
+      : this(scriptBlock, true)
+    { }
+
+    public TestExecutor(String scriptBlock, Boolean forceDebuggerPromptIfAttached)
+      : base(String.Format(UnformattedScriptBlock, forceDebuggerPromptIfAttached ? "debugger;" : "", scriptBlock))
     { }
   }
 }

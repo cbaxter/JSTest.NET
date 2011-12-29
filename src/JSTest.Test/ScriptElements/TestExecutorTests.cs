@@ -22,9 +22,21 @@ namespace JSTest.Test.ScriptElements
   public class WhenCreatingTestExecutor
   {
     [Theory, InlineData(null), InlineData(""), InlineData(" "), InlineData("\r\n")]
-    public void ThrowArgumentExceptionIfWhitespaceOnly(String scriptBlock)
+    public void AllowWhitespaceOnly(String scriptBlock)
     {
-      Assert.Throws<ArgumentException>(() => new ScriptBlock(scriptBlock));
+      Assert.DoesNotThrow(() => new TestExecutor(scriptBlock));
+    }
+
+    [Fact]
+    public void IncludeDebuggerStatementByDefault()
+    {
+      Assert.Contains("debugger;", new TestExecutor("return true;"));
+    }
+
+    [Fact]
+    public void SuppressDefaultDebuggerStatementIfExplicitlyRequested()
+    {
+      Assert.DoesNotContain("debugger;", new TestExecutor("return true;", false));
     }
   }
 
