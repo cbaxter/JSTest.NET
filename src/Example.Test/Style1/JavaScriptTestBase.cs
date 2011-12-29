@@ -26,22 +26,24 @@ namespace JSTest.Example.Test.Style1
       Script.AppendBlock(new JsAssertLibrary());
     }
 
-    protected String RunTest(String scriptBlock)
+    protected String RunTest(String context, String action)
     {
       try
       {
-        return Script.RunTest(scriptBlock + "();");
+
+        // Only the function name to call is provided, thus must add (); to invoke function.
+        return Script.RunTest(action + "();");
       }
       catch (ScriptException ex)
       {
-        // The xUnit test runner will output the 'Theory' parameters to include the executing 'scriptBlock'.
-        // i.e., JSTest.Example.Test.Style1.UsingCookieContainer.WhenGettingCookies("returnEmptyStringIfCookiesNotSet")
+        // The xUnit test runner will output the 'Theory' parameters to define the executing 'context'.
+        // i.e., JSTest.Example.Test.Style1.UsingCookieContainer.Test("whenSettingCookies", "cookieDocumentSet", "..\..\Style1\whenSettingCookies.js")
         //
         // However, the ReSharper test runner will not show any meaningful information. As such, it may be useful to
-        // add the 'scriptBlock' to the exception message to ensure we always know what 'fact' failed. 
+        // add the 'context' and 'action' to the exception message to ensure we always know what 'test' failed. 
         //
         // NOTE: The StackTrace contains no meaninful data, so intentionally thrown away here.
-        throw new ScriptException(scriptBlock + Environment.NewLine + ex.Message);
+        throw new ScriptException(context + '.' + action + Environment.NewLine + ex.Message);
       }
     }
   }

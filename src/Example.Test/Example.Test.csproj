@@ -62,7 +62,7 @@
     <Compile Include="Style3\WhenSettingCookies.cs" />
     <Compile Include="Style2\WhenGettingCookies.cs" />
     <Compile Include="Style2\WhenSettingCookies.cs" />
-    <Compile Include="Style1\JavaScriptFactData.cs" />
+    <Compile Include="Style1\JavaScriptTestSource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>
       </SubType>

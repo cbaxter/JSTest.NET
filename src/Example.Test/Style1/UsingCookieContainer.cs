@@ -1,5 +1,4 @@
 ﻿using System;
-using Xunit.Extensions;
 
 /* Copyright (c) 2011 CBaxter
  * 
@@ -32,34 +31,16 @@ namespace JSTest.Example.Test.Style1
                          ");
     }
 
-    [Theory, ClassData(typeof(WhenGettingCookiesData))]
-    public void WhenGettingCookies(String fact)
+    [JavaScriptTestSuite]
+    [JavaScriptTestFile(@"..\..\Style1\whenGettingCookies.js")]
+    [JavaScriptTestFile(@"..\..\Style1\whenSettingCookies.js")]
+    public void Test(String context, String action, String fileName)
     {
       // Append JavaScript 'Fact' File.
-      Script.AppendFile(@"..\..\Style1\whenGettingCookies.js");
+      Script.AppendFile(fileName);
 
       // Verify 'Fact'.
-      RunTest(fact);
-    }
-
-    private class WhenGettingCookiesData : JavaScriptFactData
-    {
-      public WhenGettingCookiesData() : base(@"..\..\Style1\whenGettingCookies.js") { }
-    }
-
-    [Theory, ClassData(typeof(WhenSettingCookiesData))]
-    public void WhenSettingCookies(String fact)
-    {
-      // Append JavaScript 'Fact' File.
-      Script.AppendFile(@"..\..\Style1\whenSettingCookies.js");
-
-      // Verify 'Fact'.
-      RunTest(fact);
-    }
-
-    private class WhenSettingCookiesData : JavaScriptFactData
-    {
-      public WhenSettingCookiesData() : base(@"..\..\Style1\whenSettingCookies.js") { }
+      RunTest(context, action);
     }
   }
 }
