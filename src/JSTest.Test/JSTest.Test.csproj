@@ -111,6 +111,7 @@
     <EmbeddedResource Include="ScriptResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>ScriptResources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
