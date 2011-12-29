@@ -6,7 +6,7 @@
     <owners>Chris Baxter</owners>
     <authors>Chris Baxter</authors>
     <copyright>Copyright 2011</copyright>
-    <tags>unit testing javascript browserless</tags>
+    <tags>xUnit unit testing javascript browserless</tags>
     <summary>Browserless JavaScript Unit Test Runner</summary>
     <projectUrl>https://github.com/cbaxter/JSTest.NET</projectUrl>
     <licenseUrl>https://github.com/cbaxter/JSTest.NET/wiki/MIT-License-(MIT)E</licenseUrl>
