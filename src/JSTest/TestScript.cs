@@ -52,12 +52,7 @@ namespace JSTest
 
     public String RunTest(String scriptBlock)
     {
-      return RunTest(scriptBlock, true);
-    }
-
-    public String RunTest(String scriptBlock, Boolean forceDebuggerPromptIfAttached)
-    {
-      return RunTest(new TestExecutor(scriptBlock, forceDebuggerPromptIfAttached));
+      return RunTest(new TestExecutor(scriptBlock));
     }
 
     internal String RunTest(TestExecutor testExecutor)

@@ -26,18 +26,6 @@ namespace JSTest.Test.ScriptElements
     {
       Assert.DoesNotThrow(() => new TestExecutor(scriptBlock));
     }
-
-    [Fact]
-    public void IncludeDebuggerStatementByDefault()
-    {
-      Assert.Contains("debugger;", new TestExecutor("return true;"));
-    }
-
-    [Fact]
-    public void SuppressDefaultDebuggerStatementIfExplicitlyRequested()
-    {
-      Assert.DoesNotContain("debugger;", new TestExecutor("return true;", false));
-    }
   }
 
   public class WhenConvertingTestExecutorToString
@@ -45,10 +33,9 @@ namespace JSTest.Test.ScriptElements
     [Fact]
     public void WrapScriptBlockWithTestRunnerJavaScript()
     {
-      var scriptBlock = new ScriptBlock("function myFunction() { }");
-      var testExecutor = new TestExecutor(scriptBlock);
+      var testExecutor = new TestExecutor("function myFunction() { }");
 
-      Assert.Equal(String.Format(ScriptResources.TestExecutorScriptBlockFormat, scriptBlock), testExecutor);
+      Assert.Equal(String.Format(ScriptResources.TestExecutorScriptBlockFormat, "function myFunction() { }"), testExecutor);
     }
 
     [Fact]

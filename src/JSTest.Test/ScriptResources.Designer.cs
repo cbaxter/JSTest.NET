@@ -156,11 +156,9 @@ namespace JSTest.Test {
         ///(function () {{
         ///  try {{
         ///    WScript.Echo(JSON.stringify((function () {{
-        ///      debugger;
         ///      // START TEST BLOCK //
         ///{0}
         ///      // END TEST BLOCK //
-        ///      
         ///      return null;
         ///    }})()));
         ///    WScript.Quit(0);

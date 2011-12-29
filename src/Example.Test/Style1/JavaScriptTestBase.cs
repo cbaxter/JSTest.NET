@@ -32,7 +32,7 @@ namespace JSTest.Example.Test.Style1
       {
 
         // Only the function name to call is provided, thus must add (); to invoke function.
-        return Script.RunTest(action + "();", false);
+        return Script.RunTest(action + "();");
       }
       catch (ScriptException ex)
       {

@@ -18,14 +18,13 @@ namespace JSTest.ScriptElements
 {
   internal class TestExecutor : ScriptBlock
   {
-    private const String UnformattedScriptBlock = @"(function () {{
+    private const String UnformattedScriptBlock =
+      @"(function () {{
   try {{
     WScript.Echo(JSON.stringify((function () {{
-      {0}
       // START TEST BLOCK //
-{1}
+{0}
       // END TEST BLOCK //
-      
       return null;
     }})()));
     WScript.Quit(0);
@@ -37,11 +36,7 @@ namespace JSTest.ScriptElements
 }})();";
 
     public TestExecutor(String scriptBlock)
-      : this(scriptBlock, true)
-    { }
-
-    public TestExecutor(String scriptBlock, Boolean forceDebuggerPromptIfAttached)
-      : base(String.Format(UnformattedScriptBlock, forceDebuggerPromptIfAttached ? "debugger;" : "", scriptBlock))
+      : base(String.Format(UnformattedScriptBlock, scriptBlock))
     { }
   }
 }
