@@ -1,4 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
+using System.Text.RegularExpressions;
+using Xunit.Extensions;
 
 /* Copyright (c) 2011 CBaxter
  * 
@@ -16,31 +21,26 @@
 
 namespace JSTest.Example.Test.Style1
 {
-  public class UsingCookieContainer : JavaScriptTestBase
+  public class JavaScriptTestFile : DataAttribute
   {
-    public UsingCookieContainer()
-    {
-      // Append Required JavaScript Files.
-      Script.AppendFile(@"..\..\Scripts\dateExtensions.js");
-      Script.AppendFile(@"..\..\Scripts\cookieContainer.js");
+    // Customize regular expression to your naming preference; example below assumes all parameterless functions are tests.
+    private static readonly Regex TestPattern = new Regex(@"^function\s+(?<fact>[\w\d]+)\s*\(\s*\)\s*\{?\s*$", RegexOptions.Multiline);
+    private readonly String _fileName;
+    private readonly String _context;
 
-      // Setup JavaScript Context (alternatively may `AppendFile` with setup JavaScript).
-      Script.AppendBlock(@"
-                           var document = {};
-                           var cookieContainer = new CookieContainer(document);
-                         ");
+    public JavaScriptTestFile(String fileName)
+    {
+      if (String.IsNullOrWhiteSpace(fileName)) throw new ArgumentNullException("fileName");
+      if (!File.Exists(fileName)) throw new FileNotFoundException("fileName", fileName);
+
+      _context = Path.GetFileNameWithoutExtension(fileName);
+      _fileName = fileName;
     }
 
-    [JavaScriptTestSuite]
-    [JavaScriptTestFile(@"..\..\Style1\whenGettingCookies.js")]
-    [JavaScriptTestFile(@"..\..\Style1\whenSettingCookies.js")]
-    public void Test(String context, String action, String fileName)
+    public override IEnumerable<object[]> GetData(MethodInfo methodUnderTest, Type[] parameterTypes)
     {
-      // Append JavaScript 'Fact' File.
-      Script.AppendFile(fileName);
-
-      // Verify 'Fact'.
-      RunTest(context, action);
+      foreach (Match match in TestPattern.Matches(File.ReadAllText(_fileName)))
+        yield return new Object[] { _context, match.Groups["fact"].Value, _fileName };
     }
   }
 }
