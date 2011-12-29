@@ -160,6 +160,7 @@ namespace JSTest.Test {
         ///      // START TEST BLOCK //
         ///{0}
         ///      // END TEST BLOCK //
+        ///      
         ///      return null;
         ///    }})()));
         ///    WScript.Quit(0);
