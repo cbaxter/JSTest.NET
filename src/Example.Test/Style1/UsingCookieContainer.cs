@@ -23,12 +23,6 @@ namespace JSTest.Example.Test.Style1
       // Append Required JavaScript Files.
       Script.AppendFile(@"..\..\Scripts\dateExtensions.js");
       Script.AppendFile(@"..\..\Scripts\cookieContainer.js");
-
-      // Setup JavaScript Context (alternatively may `AppendFile` with setup JavaScript).
-      Script.AppendBlock(@"
-                           var document = {};
-                           var cookieContainer = new CookieContainer(document);
-                         ");
     }
 
     [JavaScriptTestSuite]

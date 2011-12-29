@@ -12,6 +12,9 @@
 * IN THE SOFTWARE. 
 */
 
+var document = {};
+var cookieContainer = new CookieContainer(document);
+
 function cookieDocumentSet() {
   cookieContainer.setCookie('MyCookie', 'Chocolate Chip');
 
