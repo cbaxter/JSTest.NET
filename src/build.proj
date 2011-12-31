@@ -62,14 +62,39 @@
     <xunit Assembly="%(TestProjects.Identity)" />
   </Target>
 
-  <Target Name="Package" DependsOnTargets="Test">
-    <Copy SourceFiles="..\.nuget\JSTest.dll.nuspec" DestinationFolder="$(BuildOutput)"></Copy>
-    <Copy SourceFiles="JSTest\bin\$(Configuration)\JSTest.dll" DestinationFolder="$(BuildOutput)\lib"></Copy>
-
-    <XmlUpdate XmlFileName="$(BuildOutput)\JSTest.dll.nuspec" Xpath="//package/metadata/version/text()" Value="$(BuildVersion)" />
+  <Target Name="PackageCore">
+    <PropertyGroup>
+      <JSTestFolder>$(BuildOutput)\JSTest</JSTestFolder>
+      <JSTestAssembly>JSTest.dll</JSTestAssembly>
+    </PropertyGroup>
     
+    <Copy SourceFiles="..\.nuget\$(JSTestAssembly).nuspec" DestinationFolder="$(JSTestFolder)"></Copy>
+    <Copy SourceFiles="JSTest\bin\$(Configuration)\$(JSTestAssembly)" DestinationFolder="$(JSTestFolder)\lib"></Copy>
+
+    <XmlUpdate XmlFileName="$(JSTestFolder)\$(JSTestAssembly).nuspec" Xpath="//package/metadata/version/text()" Value="$(BuildVersion)" />
+
+    <Exec Command="$(NuGet) pack $(JSTestFolder)\$(JSTestAssembly).nuspec -OutputDirectory $(JSTestFolder)" />
+  </Target>
+
+  <Target Name="PackageXunitExtension">
+    <PropertyGroup>
+      <XunitExtensionFolder>$(BuildOutput)\JSTest.Integration.xUnit</XunitExtensionFolder>
+      <XunitExtensionAssembly>JSTest.Integration.xUnit.dll</XunitExtensionAssembly>
+    </PropertyGroup>
+
+    <Copy SourceFiles="..\.nuget\$(XunitExtensionAssembly).nuspec" DestinationFolder="$(XunitExtensionFolder)"></Copy>
+    <Copy SourceFiles="JSTest.Integration.xUnit\bin\$(Configuration)\$(XunitExtensionAssembly)" DestinationFolder="$(XunitExtensionFolder)\lib"></Copy>
+
+    <XmlUpdate XmlFileName="$(XunitExtensionFolder)\$(XunitExtensionAssembly).nuspec" Xpath="//package/metadata/version/text()" Value="$(BuildVersion)" />
+
+    <Exec Command="$(NuGet) pack $(XunitExtensionFolder)\$(XunitExtensionAssembly).nuspec -OutputDirectory $(XunitExtensionFolder)" />
+  </Target>
+
+  <Target Name="Package" DependsOnTargets="Test">
     <Exec Command="$(NuGet) update -self" />
-    <Exec Command="$(NuGet) pack $(BuildOutput)\JSTest.dll.nuspec -OutputDirectory $(BuildOutput)" />
+
+    <CallTarget Targets="PackageCore" />
+    <CallTarget Targets="PackageXunitExtension" />
   </Target>
 
 </Project>

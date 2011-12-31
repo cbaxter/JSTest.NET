@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using Xunit.Extensions;
@@ -19,28 +20,34 @@ using Xunit.Extensions;
  * IN THE SOFTWARE. 
  */
 
-namespace JSTest.Example.Test.Style1
+namespace JSTest.Integration.Xunit
 {
-  public class JavaScriptTestFile : DataAttribute
+  [AttributeUsage(AttributeTargets.Method, Inherited = true, AllowMultiple = true)]
+  public class JavaScriptTestFileAttribute : DataAttribute
   {
-    // Customize regular expression to your naming preference; example below assumes all parameterless functions are tests.
-    private static readonly Regex TestPattern = new Regex(@"^function\s+(?<fact>[\w\d]+)\s*\(\s*\)\s*\{?\s*$", RegexOptions.Multiline);
+    private readonly Regex _testPattern;
     private readonly String _fileName;
     private readonly String _context;
 
-    public JavaScriptTestFile(String fileName)
+    public JavaScriptTestFileAttribute(String fileName)
+      : this(fileName, @"[$A-Za-z_][$A-Za-z0-9_]*")
+    { }
+
+    public JavaScriptTestFileAttribute(String fileName, String testFunctionPattern)
     {
       if (String.IsNullOrWhiteSpace(fileName)) throw new ArgumentNullException("fileName");
-      if (!File.Exists(fileName)) throw new FileNotFoundException("fileName", fileName);
+      if (String.IsNullOrWhiteSpace(testFunctionPattern)) throw new ArgumentNullException("testFunctionPattern");
 
+      _testPattern = new Regex(@"^\s*function\s+(?<fact>" + testFunctionPattern + @")\s*\(\s*\)\s*\{?\s*$", RegexOptions.Multiline);
       _context = Path.GetFileNameWithoutExtension(fileName);
       _fileName = fileName;
     }
 
-    public override IEnumerable<object[]> GetData(MethodInfo methodUnderTest, Type[] parameterTypes)
+    public override IEnumerable<Object[]> GetData(MethodInfo methodUnderTest, Type[] parameterTypes)
     {
-      foreach (Match match in TestPattern.Matches(File.ReadAllText(_fileName)))
-        yield return new Object[] { _context, match.Groups["fact"].Value, _fileName };
+      return from Match match
+               in _testPattern.Matches(File.ReadAllText(_fileName))
+           select new Object[] { _context, match.Groups["fact"].Value, _fileName };
     }
   }
 }
