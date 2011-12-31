@@ -24,6 +24,8 @@ namespace JSTest.ScriptElements
     WScript.Echo(JSON.stringify((function () {{
       // START TEST BLOCK //
 {0}
+{1}
+{2}
       // END TEST BLOCK //
       return null;
     }})()));
@@ -35,8 +37,12 @@ namespace JSTest.ScriptElements
   }}
 }})();";
 
-    public TestExecutor(String scriptBlock)
-      : base(String.Format(UnformattedScriptBlock, scriptBlock))
+    public TestExecutor(String test)
+      : base(String.Format(UnformattedScriptBlock, String.Empty, test, String.Empty))
+    { }
+
+    public TestExecutor(String setup, String test, String teardown)
+      : base(String.Format(UnformattedScriptBlock, setup, test, teardown))
     { }
   }
 }

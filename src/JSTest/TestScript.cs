@@ -23,16 +23,26 @@ namespace JSTest
 {
   public class TestScript
   {
+    private const String NoAction = "";
+    private const String Breakpoint = "debugger;";
     private readonly StringBuilder _script = new StringBuilder();
     private readonly ICScriptCommand _cscriptCommand;
+
+    public Boolean IncludeDefaultBreakpoint { get; set; }
 
     public TestScript()
       : this(TimeSpan.FromSeconds(10))
     { }
 
     public TestScript(TimeSpan timeout)
+      : this(new CScriptCommand(timeout))
+    { }
+
+    internal TestScript(ICScriptCommand cscriptCommand)
     {
-      _cscriptCommand = new CScriptCommand(timeout);
+      IncludeDefaultBreakpoint = true;
+
+      _cscriptCommand = cscriptCommand;
     }
 
     public void AppendBlock(String scriptBlock)
@@ -50,12 +60,12 @@ namespace JSTest
       _script.AppendLine(new ScriptInclude(fileName));
     }
 
-    public String RunTest(String scriptBlock)
+    public String RunTest(String testScript)
     {
-      return RunTest(new TestExecutor(scriptBlock));
+      return RunTest(new TestExecutor(IncludeDefaultBreakpoint ? Breakpoint : NoAction, testScript, NoAction));
     }
 
-    internal String RunTest(TestExecutor testExecutor)
+    private String RunTest(TestExecutor testExecutor)
     {
       String scriptFile = Path.ChangeExtension(Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString()), ".wsf");
 

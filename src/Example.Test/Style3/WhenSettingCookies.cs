@@ -47,7 +47,7 @@ namespace JSTest.Example.Test.Style3
     [Fact]
     public void CookieExpirySetIfDaysSpecified()
     {
-      const String dateFormat = "ddd, dd MMM yyyy HH:mm:ss UTC";
+      const String dateFormat = "ddd, d MMM yyyy HH:mm:ss UTC";
 
       var now = DateTime.UtcNow;
       var result = RunTest(String.Format(@"

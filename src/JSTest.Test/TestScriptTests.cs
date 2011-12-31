@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using JSTest.ScriptElements;
 using Xunit;
 
@@ -47,15 +48,15 @@ namespace JSTest.Test
         script.AppendFile(tempFile1.FileName);
         script.AppendFile(tempFile2.FileName);
         script.AppendFile(tempFile3.FileName);
-        
+
         Assert.Equal(String.Format(
           @"<script language='JavaScript' src='{0}'></script>{3}<script language='JavaScript' src='{1}'></script>{3}<script language='JavaScript' src='{2}'></script>{3}",
           tempFile1.FileName,
           tempFile2.FileName,
-          tempFile3.FileName, 
+          tempFile3.FileName,
           Environment.NewLine
         ), script.ToString());
-      }   
+      }
     }
 
     [Fact]
@@ -71,7 +72,7 @@ namespace JSTest.Test
     {
       var script = new TestScript();
 
-      Assert.Equal("\"Success!\"", script.RunTest("return 'Success!';")); 
+      Assert.Equal("\"Success!\"", script.RunTest("return 'Success!';"));
     }
 
     [Fact]
@@ -80,8 +81,60 @@ namespace JSTest.Test
       var script = new TestScript();
 
       var ex = Assert.Throws<ScriptException>(() => script.RunTest("throw { message: 'My Script Exception' };"));
-     
+
       Assert.Equal(ex.Message, "{\"message\":\"My Script Exception\"}");
+    }
+
+    [Fact]
+    public void RunTestIncludesDefaultDebuggerStatementByDefault()
+    {
+      var cscriptCommand = new FakeCScriptCommand();
+      var script = new TestScript(cscriptCommand);
+
+      script.RunTest("return true;");
+
+      Assert.True(cscriptCommand.ScriptContainedDebuggerStatement);
+    }
+
+    [Fact]
+    public void RunTestIncludesDefaultDebuggerStatementIfRequested()
+    {
+      var cscriptCommand = new FakeCScriptCommand();
+      var script = new TestScript(cscriptCommand) { IncludeDefaultBreakpoint = true };
+
+      script.RunTest("return true;");
+
+      Assert.True(cscriptCommand.ScriptContainedDebuggerStatement);
+    }
+
+    [Fact]
+    public void RunTestDoesNotIncludeDefaultDebuggerStatementIfSuppressed()
+    {
+      var cscriptCommand = new FakeCScriptCommand();
+      var script = new TestScript(cscriptCommand) { IncludeDefaultBreakpoint = false };
+
+      script.RunTest("return true;");
+
+      Assert.False(cscriptCommand.ScriptContainedDebuggerStatement);
+    }
+
+    private class FakeCScriptCommand : ICScriptCommand
+    {
+      public Boolean ScriptContainedDebuggerStatement { get; set; }
+
+      public String Run(String fileName)
+      {
+        ScriptContainedDebuggerStatement = File.ReadAllText(fileName).Contains("debugger;");
+
+        return null;
+      }
+
+      public String Debug(String fileName)
+      {
+        ScriptContainedDebuggerStatement = File.ReadAllText(fileName).Contains("debugger;");
+
+        return null;
+      }
     }
   }
 }

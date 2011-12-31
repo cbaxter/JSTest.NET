@@ -35,7 +35,7 @@ namespace JSTest.Test.ScriptElements
     {
       var testExecutor = new TestExecutor("function myFunction() { }");
 
-      Assert.Equal(String.Format(ScriptResources.TestExecutorScriptBlockFormat, "function myFunction() { }"), testExecutor);
+      Assert.Equal(String.Format(ScriptResources.TestExecutorScriptBlockFormat, String.Empty, "function myFunction() { }", String.Empty), testExecutor);
     }
 
     [Fact]

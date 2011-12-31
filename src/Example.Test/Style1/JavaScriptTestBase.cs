@@ -19,7 +19,7 @@ namespace JSTest.Example.Test.Style1
 {
   public abstract class JavaScriptTestBase
   {
-    protected readonly TestScript Script = new TestScript();
+    protected readonly TestScript Script = new TestScript { IncludeDefaultBreakpoint = false };
 
     protected JavaScriptTestBase()
     {
