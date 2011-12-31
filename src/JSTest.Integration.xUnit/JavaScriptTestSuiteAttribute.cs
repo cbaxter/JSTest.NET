@@ -1,6 +1,5 @@
 ﻿using System;
-using JSTest.Integration.Xunit;
-using JSTest.ScriptLibraries;
+using Xunit.Extensions;
 
 /* Copyright (c) 2011 CBaxter
  * 
@@ -16,30 +15,9 @@ using JSTest.ScriptLibraries;
  * IN THE SOFTWARE. 
  */
 
-namespace JSTest.Example.Test.Style1
+namespace JSTest.Integration.Xunit
 {
-  public class UsingCookieContainer : JavaScriptTestBase
-  {
-    public UsingCookieContainer()
-    {
-      // Append required JavaScript libraries.
-      Script.AppendBlock(new JsAssertLibrary());
-
-      // Append required JavaScript Files.
-      Script.AppendFile(@"..\..\Scripts\dateExtensions.js");
-      Script.AppendFile(@"..\..\Scripts\cookieContainer.js");
-    }
-
-    [JavaScriptTestSuite]
-    [JavaScriptTestFile(@"..\..\Style1\whenGettingCookies.js")]
-    [JavaScriptTestFile(@"..\..\Style1\whenSettingCookies.js")]
-    public void Test(String context, String action, String fileName)
-    {
-      // Append JavaScript 'Fact' File.
-      Script.AppendFile(fileName);
-
-      // Verify 'Fact'.
-      RunTest(context, action);
-    }
-  }
+  [AttributeUsage(AttributeTargets.Method, Inherited = true, AllowMultiple = false)]
+  public class JavaScriptTestSuiteAttribute : TheoryAttribute
+  { }
 }

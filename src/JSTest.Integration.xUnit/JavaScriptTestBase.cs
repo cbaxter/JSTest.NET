@@ -1,4 +1,4 @@
-﻿using Xunit.Extensions;
+﻿using System;
 
 /* Copyright (c) 2011 CBaxter
  * 
@@ -14,8 +14,33 @@
  * IN THE SOFTWARE. 
  */
 
-namespace JSTest.Example.Test.Style1
+namespace JSTest.Integration.Xunit
 {
-  public class JavaScriptTestSuite : TheoryAttribute
-  { }
+  public abstract class JavaScriptTestBase
+  {
+    protected readonly TestScript Script;
+
+    protected JavaScriptTestBase()
+      : this(false)
+    { }
+
+    protected JavaScriptTestBase(Boolean includeDefaultBreakpoint)
+    {
+      Script = new TestScript { IncludeDefaultBreakpoint = includeDefaultBreakpoint };
+    }
+
+    protected String RunTest(String context, String action)
+    {
+      try
+      {
+        // The action will always be the function name to call; must invoke function with (); to run test.
+        return Script.RunTest(action + "();");
+      }
+      catch (ScriptException ex)
+      {
+        // StackTrace intentionally thrown away as it contains no meaninful information; exception details are in message.
+        throw new ScriptException(context + '.' + action + Environment.NewLine + ex.Message);
+      }
+    }
+  }
 }
