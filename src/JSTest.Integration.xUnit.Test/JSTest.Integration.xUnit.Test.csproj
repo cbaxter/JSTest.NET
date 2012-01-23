@@ -46,14 +46,16 @@
     <Compile Include="..\Shared\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
+    <Compile Include="JavaScriptTestBaseTest.cs" />
     <Compile Include="JavaScriptTestFileAttributeTest.cs" />
-    <Compile Include="JavaScriptSuiteSuiteAttributeTest.cs" />
+    <Compile Include="JavaScriptTestSuiteAttributeTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="TestFile3.js" />
     <Content Include="TestFile2.js" />
     <Content Include="TestFile1.js" />
   </ItemGroup>

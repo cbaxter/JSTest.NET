@@ -34,7 +34,7 @@ namespace JSTest.Integration.Xunit
       try
       {
         // The action will always be the function name to call; must invoke function with (); to run test.
-        return Script.RunTest(action + "();");
+        return Script.RunTest(String.Format("return {0}();", action));
       }
       catch (ScriptException ex)
       {

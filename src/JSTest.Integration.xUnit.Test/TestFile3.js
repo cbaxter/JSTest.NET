@@ -1,0 +1,3 @@
+﻿function returnTrue() {
+  return true;
+}
