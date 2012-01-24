@@ -1,5 +1,6 @@
-﻿using System;
-using System.IO;
+﻿using JSTest.ScriptElements;
+using JSTest.ScriptLibraries;
+using NUnit.Framework;
 
 /* Copyright (c) 2011 CBaxter
  * 
@@ -15,25 +16,32 @@ using System.IO;
  * IN THE SOFTWARE. 
  */
 
-namespace JSTest.ScriptElements
+namespace JSTest.Examples.Nunit.Style1
 {
-  public class ScriptInclude : ScriptElement
+  [TestFixture]
+  public class UsingCookieContainer
   {
-    private readonly FileInfo _fileInfo;
+    [Datapoints]
+    public readonly TestCase[] WhenGettingCookies = TestCase.LoadFrom(@"..\..\whenGettingCookies.js");
 
-    public ScriptInclude(String fileName)
+    [Datapoints]
+    public readonly TestCase[] WhenSettingCookies = TestCase.LoadFrom(@"..\..\whenSettingCookies.js");
+    
+    [Theory]
+    public void Test(TestCase testCase)
     {
-      Verify.NotWhiteSpace(fileName, "fileName");
+      var script = new TestScript { IncludeDefaultBreakpoint = false };
 
-      _fileInfo = new FileInfo(fileName);
+      // Append required JavaScript libraries.
+      script.AppendBlock(new JsAssertLibrary());
 
-      if (!_fileInfo.Exists)
-        throw new FileNotFoundException("Unable to find the specified file.", fileName);
-    }
+      // Append required JavaScript Files.
+      script.AppendFile(@"..\..\dateExtensions.js");
+      script.AppendFile(@"..\..\cookieContainer.js");
+      script.AppendFile(testCase.TestFile);
 
-    public override String ToScriptFragment()
-    {
-      return String.Format("<script language='JavaScript' src='{0}'></script>", _fileInfo.FullName);
+      // Run 'Test'.
+      script.RunTest(testCase);
     }
   }
 }

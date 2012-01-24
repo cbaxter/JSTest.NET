@@ -1,5 +1,4 @@
-﻿using System;
-using JSTest.Integration.Xunit;
+﻿using JSTest.Integration.Xunit;
 using JSTest.ScriptLibraries;
 
 /* Copyright (c) 2011 CBaxter
@@ -16,7 +15,7 @@ using JSTest.ScriptLibraries;
  * IN THE SOFTWARE. 
  */
 
-namespace JSTest.Example.Test.Style1
+namespace JSTest.Examples.Xunit.Style1
 {
   public class UsingCookieContainer : JavaScriptTestBase
   {
@@ -26,20 +25,20 @@ namespace JSTest.Example.Test.Style1
       Script.AppendBlock(new JsAssertLibrary());
 
       // Append required JavaScript Files.
-      Script.AppendFile(@"..\..\Scripts\dateExtensions.js");
-      Script.AppendFile(@"..\..\Scripts\cookieContainer.js");
+      Script.AppendFile(@"..\..\dateExtensions.js");
+      Script.AppendFile(@"..\..\cookieContainer.js");
     }
 
     [JavaScriptTestSuite]
-    [JavaScriptTestFile(@"..\..\Style1\whenGettingCookies.js")]
-    [JavaScriptTestFile(@"..\..\Style1\whenSettingCookies.js")]
-    public void Test(String context, String action, String fileName)
+    [JavaScriptFactFile(@"..\..\whenGettingCookies.js")]
+    [JavaScriptFactFile(@"..\..\whenSettingCookies.js")]
+    public void Test(JavaScriptFact fact)
     {
       // Append JavaScript 'Fact' File.
-      Script.AppendFile(fileName);
+      Script.AppendFile(fact.TestFile);
 
       // Verify 'Fact'.
-      RunTest(context, action);
+      RunTest(fact);
     }
   }
 }

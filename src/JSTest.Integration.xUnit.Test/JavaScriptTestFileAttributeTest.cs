@@ -19,6 +19,7 @@ using Xunit;
 
 namespace JSTest.Integration.Xunit.Test
 {
+#pragma warning disable 612,618
   public class JavaScriptTestFileAttributeTest
   {
     [Fact]
@@ -40,7 +41,9 @@ namespace JSTest.Integration.Xunit.Test
     [Fact]
     public void ThrowArgumentExceptionOnBadRegexExpression()
     {
-      Assert.Throws<ArgumentException>(() => new JavaScriptTestFileAttribute(@"..\..\TestFile1.js", "("));
+      var attribute = new JavaScriptTestFileAttribute(@"..\..\TestFile1.js", "(");
+
+      Assert.Throws<ArgumentException>(() => attribute.GetData(null, null));
     }
 
     [Fact]
@@ -83,4 +86,5 @@ namespace JSTest.Integration.Xunit.Test
       Assert.True(attribute.GetData(null, null).All(arguments => arguments[2].Equals(@"..\..\TestFile1.js")));
     }
   }
+#pragma warning restore 612,618
 }

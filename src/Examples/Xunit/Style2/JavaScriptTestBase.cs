@@ -1,6 +1,4 @@
-﻿using System;
-using JSTest.ScriptLibraries;
-using Newtonsoft.Json;
+﻿using JSTest.ScriptLibraries;
 
 /* Copyright (c) 2011 CBaxter
  * 
@@ -16,7 +14,7 @@ using Newtonsoft.Json;
  * IN THE SOFTWARE. 
  */
 
-namespace JSTest.Example.Test.Style3
+namespace JSTest.Examples.Xunit.Style2
 {
   public abstract class JavaScriptTestBase
   {
@@ -25,11 +23,6 @@ namespace JSTest.Example.Test.Style3
     protected JavaScriptTestBase()
     {
       Script.AppendBlock(new JsAssertLibrary());
-    }
-
-    protected Object RunTest(String scriptBlock)
-    {
-      return JsonConvert.DeserializeObject(Script.RunTest(scriptBlock));
     }
   }
 }

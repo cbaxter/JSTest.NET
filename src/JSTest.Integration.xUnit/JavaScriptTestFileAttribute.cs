@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using System.Text.RegularExpressions;
+using JSTest.ScriptElements;
 using Xunit.Extensions;
 
 /* Copyright (c) 2011 CBaxter
@@ -21,33 +21,29 @@ using Xunit.Extensions;
 
 namespace JSTest.Integration.Xunit
 {
+  [Obsolete("Replace with JavaScriptFactFileAttribute")]
   [AttributeUsage(AttributeTargets.Method, Inherited = true, AllowMultiple = true)]
   public class JavaScriptTestFileAttribute : DataAttribute
   {
-    private readonly Regex _testPattern;
     private readonly String _fileName;
-    private readonly String _context;
+    private readonly String _testFunctionPattern;
 
     public JavaScriptTestFileAttribute(String fileName)
-      : this(fileName, @"[$A-Za-z_][$A-Za-z0-9_]*")
+      : this(fileName, null)
     { }
 
     public JavaScriptTestFileAttribute(String fileName, String testFunctionPattern)
     {
-      Verify.NotWhiteSpace(fileName, "fileName");
-      Verify.NotWhiteSpace(testFunctionPattern, "testFunctionPattern");
-
-      _testPattern = new Regex(@"^\s*function\s+(?<fact>" + testFunctionPattern + @")\s*\(\s*\)\s*\{?\s*$", RegexOptions.Multiline);
-      _context = Path.GetFileNameWithoutExtension(fileName);
       _fileName = fileName;
+      _testFunctionPattern = testFunctionPattern;
     }
 
     public override IEnumerable<Object[]> GetData(MethodInfo methodUnderTest, Type[] parameterTypes)
     {
       var result = new List<Object[]>();
 
-      foreach (Match match in _testPattern.Matches(File.ReadAllText(_fileName)))
-        result.Add(new Object[] { _context, match.Groups["fact"].Value, _fileName });
+      foreach (var testCase in TestCase.LoadFrom(_fileName, _testFunctionPattern))
+        result.Add(new Object[] { Path.GetFileNameWithoutExtension(testCase.TestFile), testCase.TestFunction, testCase.TestFile });
 
       return result;
     }

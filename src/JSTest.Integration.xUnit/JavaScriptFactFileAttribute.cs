@@ -1,5 +1,8 @@
 ﻿using System;
-using System.IO;
+using System.Collections.Generic;
+using System.Reflection;
+using JSTest.ScriptElements;
+using Xunit.Extensions;
 
 /* Copyright (c) 2011 CBaxter
  * 
@@ -15,25 +18,32 @@ using System.IO;
  * IN THE SOFTWARE. 
  */
 
-namespace JSTest.ScriptElements
+namespace JSTest.Integration.Xunit
 {
-  public class ScriptInclude : ScriptElement
+  [AttributeUsage(AttributeTargets.Method, Inherited = true, AllowMultiple = true)]
+  public class JavaScriptFactFileAttribute : DataAttribute
   {
-    private readonly FileInfo _fileInfo;
+    private readonly String _fileName;
+    private readonly String _testFunctionPattern;
 
-    public ScriptInclude(String fileName)
+    public JavaScriptFactFileAttribute(String fileName)
+      : this(fileName, null)
+    { }
+
+    public JavaScriptFactFileAttribute(String fileName, String testFunctionPattern)
     {
-      Verify.NotWhiteSpace(fileName, "fileName");
-
-      _fileInfo = new FileInfo(fileName);
-
-      if (!_fileInfo.Exists)
-        throw new FileNotFoundException("Unable to find the specified file.", fileName);
+      _fileName = fileName;
+      _testFunctionPattern = testFunctionPattern;
     }
 
-    public override String ToScriptFragment()
+    public override IEnumerable<Object[]> GetData(MethodInfo methodUnderTest, Type[] parameterTypes)
     {
-      return String.Format("<script language='JavaScript' src='{0}'></script>", _fileInfo.FullName);
+      var result = new List<Object[]>();
+
+      foreach (var testCase in TestCase.LoadFrom(_fileName, _testFunctionPattern))
+        result.Add(new Object[] { new JavaScriptFact(testCase) });
+
+      return result;
     }
   }
 }

@@ -18,12 +18,7 @@ namespace JSTest.ScriptElements
 {
   public abstract class ScriptElement
   {
-    protected abstract String ToScriptFragment();
-
-    public override string ToString()
-    {
-      return ToScriptFragment();
-    }
+    public abstract String ToScriptFragment();
 
     public static implicit operator String(ScriptElement element)
     {

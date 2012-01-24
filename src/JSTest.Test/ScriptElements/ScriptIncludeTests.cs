@@ -44,7 +44,7 @@ namespace JSTest.Test.ScriptElements
       {
         Assert.Equal(
           String.Format(ScriptResources.ScriptIncludeFormat, tempFile.FileName),
-          new ScriptInclude(tempFile.FileName)
+          new ScriptInclude(tempFile.FileName).ToScriptFragment()
         );
       }
     }
@@ -58,7 +58,7 @@ namespace JSTest.Test.ScriptElements
 
         String script = scriptInclude;
 
-        Assert.Equal(scriptInclude.ToString(), script);
+        Assert.Equal(scriptInclude.ToScriptFragment(), script);
       }
     }
   }

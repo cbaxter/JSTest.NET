@@ -1,5 +1,6 @@
 ﻿using System;
-using System.IO;
+using JSTest.ScriptLibraries;
+using Newtonsoft.Json;
 
 /* Copyright (c) 2011 CBaxter
  * 
@@ -15,25 +16,20 @@ using System.IO;
  * IN THE SOFTWARE. 
  */
 
-namespace JSTest.ScriptElements
+namespace JSTest.Examples.Xunit.Style3
 {
-  public class ScriptInclude : ScriptElement
+  public abstract class JavaScriptTestBase
   {
-    private readonly FileInfo _fileInfo;
+    protected readonly TestScript Script = new TestScript();
 
-    public ScriptInclude(String fileName)
+    protected JavaScriptTestBase()
     {
-      Verify.NotWhiteSpace(fileName, "fileName");
-
-      _fileInfo = new FileInfo(fileName);
-
-      if (!_fileInfo.Exists)
-        throw new FileNotFoundException("Unable to find the specified file.", fileName);
+      Script.AppendBlock(new JsAssertLibrary());
     }
 
-    public override String ToScriptFragment()
+    protected Object RunTest(String scriptBlock)
     {
-      return String.Format("<script language='JavaScript' src='{0}'></script>", _fileInfo.FullName);
+      return JsonConvert.DeserializeObject(Script.RunTest(scriptBlock));
     }
   }
 }

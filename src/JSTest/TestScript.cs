@@ -50,14 +50,30 @@ namespace JSTest
       AppendBlock(new ScriptBlock(scriptBlock));
     }
 
-    public void AppendBlock(ScriptBlock scriptElement)
+    public void AppendBlock(ScriptBlock scriptBlock)
     {
-      _script.AppendLine(scriptElement);
+      Verify.NotNull(scriptBlock, "scriptBlock");
+
+      _script.AppendLine(scriptBlock.ToScriptFragment());
     }
 
     public void AppendFile(String fileName)
     {
       _script.AppendLine(new ScriptInclude(fileName));
+    }
+
+    public void AppendFile(ScriptInclude scriptInclude)
+    {
+      Verify.NotNull(scriptInclude, "scriptInclude");
+
+      _script.AppendLine(scriptInclude.ToScriptFragment());
+    }
+
+    public String RunTest(TestCase testCase)
+    {
+      Verify.NotNull(testCase, "testCase");
+
+      return RunTest(testCase.ToScriptFragment());
     }
 
     public String RunTest(String testScript)

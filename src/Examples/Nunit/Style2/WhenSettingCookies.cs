@@ -1,5 +1,5 @@
-﻿using System;
-using Xunit;
+﻿using JSTest.ScriptLibraries;
+using NUnit.Framework;
 
 /* Copyright (c) 2011 CBaxter
  * 
@@ -15,15 +15,25 @@ using Xunit;
  * IN THE SOFTWARE. 
  */
 
-namespace JSTest.Example.Test.Style3
+namespace JSTest.Examples.Nunit.Style2
 {
-  public class WhenSettingCookies : JavaScriptTestBase
+  [TestFixture]
+  public class WhenSettingCookies
   {
-    public WhenSettingCookies()
+    protected TestScript Script { get; set; }
+
+    [SetUp]
+    public void Setup()
     {
-      // Append Required JavaScript Files.
-      Script.AppendFile(@"..\..\Scripts\dateExtensions.js");
-      Script.AppendFile(@"..\..\Scripts\cookieContainer.js");
+      Script = new TestScript { IncludeDefaultBreakpoint = false };
+
+      // Append required JavaScript libraries.
+      Script.AppendBlock(new JsAssertLibrary());
+
+      // Append required JavaScript Files.
+      Script.AppendFile(@"..\..\dateExtensions.js");
+      Script.AppendFile(@"..\..\cookieContainer.js");
+      Script.AppendFile(@"..\..\whenSettingCookies.js");
 
       // Setup JavaScript Context
       Script.AppendBlock(@"
@@ -32,33 +42,26 @@ namespace JSTest.Example.Test.Style3
                          ");
     }
 
-    [Fact]
+    [Test]
     public void CookieDocumentSet()
     {
-      var result = RunTest(@"
-                             cookieContainer.setCookie('MyCookie', 'Chocolate Chip');
+      Script.RunTest(@"
+                       cookieContainer.setCookie('MyCookie', 'Chocolate Chip');
 
-                             return document.cookie;
-                           ");
-
-      Assert.Equal("MyCookie=Chocolate%20Chip;path=/", result);
+                       assert.equal('MyCookie=' + escape('Chocolate Chip') + ';path=/', document.cookie);
+                     ");
     }
 
-    [Fact]
+    [Test]
     public void CookieExpirySetIfDaysSpecified()
     {
-      const String dateFormat = "ddd, d MMM yyyy HH:mm:ss UTC";
+      Script.RunTest(@"
+                       var now = new Date();
 
-      var now = DateTime.UtcNow;
-      var result = RunTest(String.Format(@"
-                             var now = new Date('{0}');
+                       cookieContainer.setCookie('MyCookie', 'Chocolate Chip', 1, now);
 
-                             cookieContainer.setCookie('MyCookie', 'Chocolate Chip', 1, now);
-
-                             return document.cookie;
-                           ", now.ToString(dateFormat)));
-
-      Assert.Equal(String.Format("MyCookie=Chocolate%20Chip;expires={0};path=/", now.AddDays(1).ToString(dateFormat)), result);
+                       assert.equal('MyCookie=' + escape('Chocolate Chip') + ';expires=' + now.addDays(1).toUTCString() + ';path=/', document.cookie);
+                     ");
     }
   }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using JSTest.ScriptElements;
 
 /* Copyright (c) 2011 CBaxter
  * 
@@ -15,25 +14,12 @@ using System.IO;
  * IN THE SOFTWARE. 
  */
 
-namespace JSTest.ScriptElements
+namespace JSTest.Integration.Xunit
 {
-  public class ScriptInclude : ScriptElement
+  public class JavaScriptFact : TestCase
   {
-    private readonly FileInfo _fileInfo;
-
-    public ScriptInclude(String fileName)
-    {
-      Verify.NotWhiteSpace(fileName, "fileName");
-
-      _fileInfo = new FileInfo(fileName);
-
-      if (!_fileInfo.Exists)
-        throw new FileNotFoundException("Unable to find the specified file.", fileName);
-    }
-
-    public override String ToScriptFragment()
-    {
-      return String.Format("<script language='JavaScript' src='{0}'></script>", _fileInfo.FullName);
-    }
+    internal JavaScriptFact(TestCase testCase)
+      : base(testCase.TestFile, testCase.TestFunction)
+    { }
   }
 }

@@ -27,7 +27,7 @@ namespace JSTest.ScriptElements
       _scriptBlock = scriptBlock;
     }
 
-    protected override String ToScriptFragment()
+    public override String ToScriptFragment()
     {
       return String.Format("<script language='JavaScript'>{0}{1}{0}</script>", Environment.NewLine, _scriptBlock);
     }

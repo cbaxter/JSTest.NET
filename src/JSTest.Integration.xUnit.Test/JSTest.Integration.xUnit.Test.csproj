@@ -46,6 +46,7 @@
     <Compile Include="..\Shared\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
+    <Compile Include="JavaScriptFactFileAttributeTest.cs" />
     <Compile Include="JavaScriptTestBaseTest.cs" />
     <Compile Include="JavaScriptTestFileAttributeTest.cs" />
     <Compile Include="JavaScriptTestSuiteAttributeTest.cs" />

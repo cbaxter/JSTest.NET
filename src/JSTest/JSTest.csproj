@@ -47,6 +47,7 @@
     <Compile Include="ScriptElements\ScriptBlock.cs" />
     <Compile Include="ScriptElements\ScriptElement.cs" />
     <Compile Include="ScriptElements\ScriptInclude.cs" />
+    <Compile Include="ScriptElements\TestCase.cs" />
     <Compile Include="ScriptElements\TestExecutor.cs" />
     <Compile Include="ScriptException.cs" />
     <Compile Include="ScriptLibraries\JsMockLibrary.cs" />

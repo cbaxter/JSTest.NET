@@ -18,7 +18,7 @@ using System.Reflection;
 
 namespace JSTest.ScriptElements
 {
-  public class EmbeddedScriptBlock : ScriptBlock
+  public abstract class EmbeddedScriptBlock : ScriptBlock
   {
     protected EmbeddedScriptBlock(Assembly assembly, String resourceName)
       : base(GetManifestResource(assembly, resourceName))
