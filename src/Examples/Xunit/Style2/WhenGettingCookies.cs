@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using JSTest.ScriptLibraries;
+using Xunit;
 
 /* Copyright (c) 2011 CBaxter
  * 
@@ -16,11 +17,14 @@
 
 namespace JSTest.Examples.Xunit.Style2
 {
-  public class WhenGettingCookies : JavaScriptTestBase
+  public class WhenGettingCookies
   {
+    protected readonly TestScript Script = new TestScript();
+
     public WhenGettingCookies()
     {
       // Append Required JavaScript Files.
+      Script.AppendBlock(new JsAssertLibrary());
       Script.AppendFile(@"..\..\dateExtensions.js");
       Script.AppendFile(@"..\..\cookieContainer.js");
 

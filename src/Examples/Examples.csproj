@@ -68,7 +68,6 @@
     <Compile Include="Nunit\Style3\WhenSettingCookies.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Xunit\Style1\UsingCookieContainer.cs" />
-    <Compile Include="Xunit\Style2\JavaScriptTestBase.cs" />
     <Compile Include="Xunit\Style2\WhenGettingCookies.cs" />
     <Compile Include="Xunit\Style2\WhenSettingCookies.cs" />
     <Compile Include="Xunit\Style3\JavaScriptTestBase.cs" />
