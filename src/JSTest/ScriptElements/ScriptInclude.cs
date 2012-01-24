@@ -31,7 +31,7 @@ namespace JSTest.ScriptElements
         throw new FileNotFoundException("Unable to find the specified file.", fileName);
     }
 
-    protected override String ToScriptFragment()
+    public override String ToScriptFragment()
     {
       return String.Format("<script language='JavaScript' src='{0}'></script>", _fileInfo.FullName);
     }

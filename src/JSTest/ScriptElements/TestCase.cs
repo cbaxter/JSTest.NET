@@ -39,7 +39,7 @@ namespace JSTest.ScriptElements
       _testName = String.Concat(Path.GetFileNameWithoutExtension(fileName), '.', _functionName);
     }
 
-    protected override string ToScriptFragment()
+    public override string ToScriptFragment()
     {
       return String.Format("return {0}();", _functionName);
     }

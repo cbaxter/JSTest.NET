@@ -69,5 +69,21 @@ namespace JSTest.Test.ScriptElements
     {
       Assert.True(TestCase.LoadFrom(@"..\..\Scripts\TestFile1.js").All(testCase => testCase.TestFile.Equals(@"..\..\Scripts\TestFile1.js")));
     }
+
+    [Fact]
+    public void CanImplicitlyConvertToString()
+    {
+      var testCase = new TestCase(@"..\..\Scripts\TestFile1.js", "function1");
+
+      String script = testCase;
+
+      Assert.Equal(testCase.ToScriptFragment(), script);
+    }
+
+    [Fact]
+    public void ScriptFragmentIsFunctionInvocationWithReturn()
+    {
+      Assert.Equal("return function1();", new TestCase(@"..\..\Scripts\TestFile1.js", "function1").ToScriptFragment());
+    }
   }
 }

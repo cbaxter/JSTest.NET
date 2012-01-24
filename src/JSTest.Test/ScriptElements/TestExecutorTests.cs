@@ -35,7 +35,10 @@ namespace JSTest.Test.ScriptElements
     {
       var testExecutor = new TestExecutor("function myFunction() { }");
 
-      Assert.Equal(String.Format(ScriptResources.TestExecutorScriptBlockFormat, String.Empty, "function myFunction() { }", String.Empty), testExecutor);
+      Assert.Equal(
+        String.Format(ScriptResources.TestExecutorScriptBlockFormat, String.Empty, "function myFunction() { }", String.Empty), 
+        testExecutor.ToScriptFragment()
+      );
     }
 
     [Fact]
@@ -45,7 +48,7 @@ namespace JSTest.Test.ScriptElements
 
       String script = scriptBlock;
 
-      Assert.Equal(scriptBlock.ToString(), script);
+      Assert.Equal(scriptBlock.ToScriptFragment(), script);
     }
   }
 }
