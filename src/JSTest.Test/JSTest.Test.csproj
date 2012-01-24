@@ -65,6 +65,7 @@
     <Compile Include="ScriptElements\ScriptIncludeTests.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ScriptElements\TestCaseTests.cs" />
     <Compile Include="ScriptElements\TestExecutorTests.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -105,7 +106,11 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Scripts\TestFile1.js" />
+    <Content Include="Scripts\TestFile2.js" />
+    <Content Include="Scripts\TestFile3.js" />
+  </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ScriptResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

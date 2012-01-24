@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using JSTest.ScriptElements;
 using Xunit;
 
 /* Copyright (c) 2011 CBaxter
@@ -17,72 +18,56 @@ using Xunit;
  * IN THE SOFTWARE. 
  */
 
-namespace JSTest.Integration.Xunit.Test
+namespace JSTest.Test.ScriptElements
 {
-  public class JavaScriptTestFileAttributeTest
+  public class TestCaseTests
   {
     [Fact]
     public void ThrowFileNotFoundExceptionIfFileDoesNotExist()
     {
-      var attribute = new JavaScriptTestFileAttribute(@"..\..\DoesNotExist.js");
-
-      Assert.Throws<FileNotFoundException>(() => attribute.GetData(null, null));
+      Assert.Throws<FileNotFoundException>(() => TestCase.LoadFrom(@"..\..\Scripts\DoesNotExist.js"));
     }
 
     [Fact]
     public void AllNamedFunctionsAreTestsByDefault()
     {
-      var attribute = new JavaScriptTestFileAttribute(@"..\..\TestFile1.js");
-
-      Assert.Equal(7, attribute.GetData(null, null).Count());
+      Assert.Equal(7, TestCase.LoadFrom(@"..\..\Scripts\TestFile1.js").Count());
     }
 
     [Fact]
     public void ThrowArgumentExceptionOnBadRegexExpression()
     {
-      var attribute = new JavaScriptTestFileAttribute(@"..\..\TestFile1.js", "(");
-
-      Assert.Throws<ArgumentException>(() => attribute.GetData(null, null));
+      Assert.Throws<ArgumentException>(() => TestCase.LoadFrom(@"..\..\Scripts\TestFile1.js", "("));
     }
 
     [Fact]
     public void UseCustomExpressionIfSpecified()
     {
-      var attribute = new JavaScriptTestFileAttribute(@"..\..\TestFile2.js", @"test_[\w\d]+");
-
-      Assert.Equal(4, attribute.GetData(null, null).Count());
+      Assert.Equal(4, TestCase.LoadFrom(@"..\..\Scripts\TestFile2.js", @"test_[\w\d]+").Count());
     }
 
     [Fact]
-    public void ContextIsFileNameWithoutExtension()
+    public void TestNameIsFileNameWithoutExtensionAndFunctionName()
     {
-      var attribute = new JavaScriptTestFileAttribute(@"..\..\TestFile1.js");
-
-      Assert.True(attribute.GetData(null, null).All(arguments => arguments[0].Equals("TestFile1")));
+      Assert.Equal("TestFile1.function1", TestCase.LoadFrom(@"..\..\Scripts\TestFile1.js").First().TestName);
     }
 
     [Fact]
-    public void ActionIsFunctionNameOnlyIfDefaultPattern()
+    public void TestFunctionIsFunctionNameOnlyIfDefaultPattern()
     {
-      var attribute = new JavaScriptTestFileAttribute(@"..\..\TestFile1.js");
-      
-      Assert.Equal("function1", attribute.GetData(null, null).First()[1]);
+      Assert.Equal("function1", TestCase.LoadFrom(@"..\..\Scripts\TestFile1.js").First().TestFunction);
     }
-    
-    [Fact]
-    public void ActionIsFunctionNameOnlyIfCustomPattern()
-    {
-      var attribute = new JavaScriptTestFileAttribute(@"..\..\TestFile2.js", @"test_[\w\d]+");
 
-      Assert.Equal("test_function1", attribute.GetData(null, null).First()[1]);
+    [Fact]
+    public void TestFunctionIsFunctionNameOnlyIfCustomPattern()
+    {
+      Assert.Equal("test_function1", TestCase.LoadFrom(@"..\..\Scripts\TestFile2.js", @"test_[\w\d]+").First().TestFunction);
     }
 
     [Fact]
     public void FileNameIsSameForAllTestsInFile()
     {
-      var attribute = new JavaScriptTestFileAttribute(@"..\..\TestFile1.js");
-
-      Assert.True(attribute.GetData(null, null).All(arguments => arguments[2].Equals(@"..\..\TestFile1.js")));
+      Assert.True(TestCase.LoadFrom(@"..\..\Scripts\TestFile1.js").All(testCase => testCase.TestFile.Equals(@"..\..\Scripts\TestFile1.js")));
     }
   }
 }
