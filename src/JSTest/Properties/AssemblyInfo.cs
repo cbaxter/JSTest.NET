@@ -9,4 +9,5 @@ using System.Runtime.CompilerServices;
 
 // Expose internals to the following assemblies.
 [assembly: InternalsVisibleTo("JSTest.Test")]
+[assembly: InternalsVisibleTo("JSTest.Integration.xUnit")]
 

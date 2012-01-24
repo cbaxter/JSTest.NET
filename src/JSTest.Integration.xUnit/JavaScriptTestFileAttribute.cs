@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using Xunit.Extensions;
@@ -35,8 +34,8 @@ namespace JSTest.Integration.Xunit
 
     public JavaScriptTestFileAttribute(String fileName, String testFunctionPattern)
     {
-      if (String.IsNullOrWhiteSpace(fileName)) throw new ArgumentNullException("fileName");
-      if (String.IsNullOrWhiteSpace(testFunctionPattern)) throw new ArgumentNullException("testFunctionPattern");
+      Verify.NotWhiteSpace(fileName, "fileName");
+      Verify.NotWhiteSpace(testFunctionPattern, "testFunctionPattern");
 
       _testPattern = new Regex(@"^\s*function\s+(?<fact>" + testFunctionPattern + @")\s*\(\s*\)\s*\{?\s*$", RegexOptions.Multiline);
       _context = Path.GetFileNameWithoutExtension(fileName);
@@ -45,9 +44,12 @@ namespace JSTest.Integration.Xunit
 
     public override IEnumerable<Object[]> GetData(MethodInfo methodUnderTest, Type[] parameterTypes)
     {
-      return from Match match
-               in _testPattern.Matches(File.ReadAllText(_fileName))
-           select new Object[] { _context, match.Groups["fact"].Value, _fileName };
+      var result = new List<Object[]>();
+
+      foreach (Match match in _testPattern.Matches(File.ReadAllText(_fileName)))
+        result.Add(new Object[] { _context, match.Groups["fact"].Value, _fileName });
+
+      return result;
     }
   }
 }
