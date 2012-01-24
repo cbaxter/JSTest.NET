@@ -29,6 +29,7 @@ namespace JSTest.Integration.Xunit
       Script = new TestScript { IncludeDefaultBreakpoint = includeDefaultBreakpoint };
     }
 
+    [Obsolete("Replace with RunTest(JavaScriptFact fact)")]
     protected String RunTest(String context, String action)
     {
       try
@@ -40,6 +41,20 @@ namespace JSTest.Integration.Xunit
       {
         // StackTrace intentionally thrown away as it contains no meaninful information; exception details are in message.
         throw new ScriptException(context + '.' + action + Environment.NewLine + ex.Message);
+      }
+    }
+
+    protected String RunTest(JavaScriptFact fact)
+    {
+      try
+      {
+        // The action will always be the function name to call; must invoke function with (); to run test.
+        return Script.RunTest(fact);
+      }
+      catch (ScriptException ex)
+      {
+        // StackTrace intentionally thrown away as it contains no meaninful information; exception details are in message.
+        throw new ScriptException(fact.TestName + Environment.NewLine + ex.Message);
       }
     }
   }

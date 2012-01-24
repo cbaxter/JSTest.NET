@@ -44,6 +44,11 @@ namespace JSTest.ScriptElements
       return String.Format("return {0}();", _functionName);
     }
 
+    public override string ToString()
+    {
+      return TestName;
+    }
+
     public static TestCase[] LoadFrom(String fileName)
     {
       return LoadFrom(fileName, null);

@@ -15,15 +15,15 @@ using Xunit;
  * IN THE SOFTWARE. 
  */
 
-namespace JSTest.Example.Test.Style3
+namespace JSTest.Examples.Xunit.Style3
 {
   public class WhenGettingCookies : JavaScriptTestBase
   {
     public WhenGettingCookies()
     {
       // Append Required JavaScript Files.
-      Script.AppendFile(@"..\..\Scripts\dateExtensions.js");
-      Script.AppendFile(@"..\..\Scripts\cookieContainer.js");
+      Script.AppendFile(@"..\..\dateExtensions.js");
+      Script.AppendFile(@"..\..\cookieContainer.js");
 
       // Setup JavaScript Context
       Script.AppendBlock(@"

@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{864803E1-F7FA-4656-9761-87FE925BB847}</ProjectGuid>
+    <ProjectGuid>{AA27E7D0-F6EA-4D23-93BE-E3BE65F7CE37}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>JSTest.Example.Test</RootNamespace>
-    <AssemblyName>JSTest.Example.Test</AssemblyName>
+    <RootNamespace>JSTest.Examples</RootNamespace>
+    <AssemblyName>JSTest.Examples</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -34,10 +34,18 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\packages\Newtonsoft.Json.4.0.5\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\..\packages\NUnit.2.5.10.11092\lib\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.mocks">
+      <HintPath>..\..\packages\NUnit.2.5.10.11092\lib\nunit.mocks.dll</HintPath>
+    </Reference>
+    <Reference Include="pnunit.framework">
+      <HintPath>..\..\packages\NUnit.2.5.10.11092\lib\pnunit.framework.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="xunit">
       <HintPath>..\..\packages\xunit.1.8.0.1549\lib\xunit.dll</HintPath>
     </Reference>
@@ -46,30 +54,32 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Scripts\cookieContainer.js" />
-    <Content Include="Style1\whenGettingCookies.js" />
-    <Content Include="Style1\whenSettingCookies.js" />
-    <Content Include="Scripts\dateExtensions.js" />
     <Compile Include="..\Shared\ProductInfo.cs">
       <Link>Properties\ProductInfo.cs</Link>
     </Compile>
     <Compile Include="..\Shared\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
-    <Compile Include="Style2\JavaScriptTestBase.cs" />
-    <Compile Include="Style3\JavaScriptTestBase.cs" />
-    <Compile Include="Style3\WhenGettingCookies.cs" />
-    <Compile Include="Style3\WhenSettingCookies.cs" />
-    <Compile Include="Style2\WhenGettingCookies.cs" />
-    <Compile Include="Style2\WhenSettingCookies.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs">
-      <SubType>
-      </SubType>
-    </Compile>
-    <Compile Include="Style1\UsingCookieContainer.cs" />
+    <Compile Include="Nunit\Style1\UsingCookieContainer.cs" />
+    <Compile Include="Nunit\Style2\WhenGettingCookies.cs" />
+    <Compile Include="Nunit\Style2\WhenSettingCookies.cs" />
+    <Compile Include="Nunit\Style3\JavaScriptTestBase.cs" />
+    <Compile Include="Nunit\Style3\WhenGettingCookies.cs" />
+    <Compile Include="Nunit\Style3\WhenSettingCookies.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Xunit\Style1\UsingCookieContainer.cs" />
+    <Compile Include="Xunit\Style2\JavaScriptTestBase.cs" />
+    <Compile Include="Xunit\Style2\WhenGettingCookies.cs" />
+    <Compile Include="Xunit\Style2\WhenSettingCookies.cs" />
+    <Compile Include="Xunit\Style3\JavaScriptTestBase.cs" />
+    <Compile Include="Xunit\Style3\WhenGettingCookies.cs" />
+    <Compile Include="Xunit\Style3\WhenSettingCookies.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <Content Include="cookieContainer.js" />
+    <Content Include="dateExtensions.js" />
+    <Content Include="whenGettingCookies.js" />
+    <Content Include="whenSettingCookies.js" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\JSTest.Integration.xUnit\JSTest.Integration.xUnit.csproj">
@@ -81,6 +91,10 @@
       <Name>JSTest</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

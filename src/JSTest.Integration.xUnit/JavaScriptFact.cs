@@ -1,5 +1,4 @@
-﻿using System;
-using Xunit;
+﻿using JSTest.ScriptElements;
 
 /* Copyright (c) 2011 CBaxter
  * 
@@ -15,37 +14,12 @@ using Xunit;
  * IN THE SOFTWARE. 
  */
 
-namespace JSTest.Integration.Xunit.Test
+namespace JSTest.Integration.Xunit
 {
-
-  public class JavaScriptTestBaseTest : JavaScriptTestBase
+  public class JavaScriptFact : TestCase
   {
-    public JavaScriptTestBaseTest()
-      : base(true)
+    internal JavaScriptFact(TestCase testCase)
+      : base(testCase.TestFile, testCase.TestFunction)
     { }
-
-#pragma warning disable 612,618
-    [JavaScriptTestSuite]
-    [JavaScriptTestFile(@"..\..\TestFile3.js")]
-    public void TestLegacy(String context, String action, String fileName)
-    {
-      // Append JavaScript 'Fact' File.
-      Script.AppendFile(fileName);
-
-      // Verify 'Fact'.
-      Assert.Equal("true", RunTest(context, action));
-    }
-#pragma warning restore 612,618
-
-    [JavaScriptTestSuite]
-    [JavaScriptFactFile(@"..\..\TestFile3.js")]
-    public void Test(JavaScriptFact fact)
-    {
-      // Append JavaScript 'Fact' File.
-      Script.AppendFile(fact.TestFile);
-
-      // Verify 'Fact'.
-      Assert.Equal("true", RunTest(fact));
-    }
   }
 }

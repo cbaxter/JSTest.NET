@@ -1,5 +1,6 @@
 ﻿using System;
-using Xunit;
+using JSTest.ScriptLibraries;
+using Newtonsoft.Json;
 
 /* Copyright (c) 2011 CBaxter
  * 
@@ -15,37 +16,20 @@ using Xunit;
  * IN THE SOFTWARE. 
  */
 
-namespace JSTest.Integration.Xunit.Test
+namespace JSTest.Examples.Xunit.Style3
 {
-
-  public class JavaScriptTestBaseTest : JavaScriptTestBase
+  public abstract class JavaScriptTestBase
   {
-    public JavaScriptTestBaseTest()
-      : base(true)
-    { }
+    protected readonly TestScript Script = new TestScript();
 
-#pragma warning disable 612,618
-    [JavaScriptTestSuite]
-    [JavaScriptTestFile(@"..\..\TestFile3.js")]
-    public void TestLegacy(String context, String action, String fileName)
+    protected JavaScriptTestBase()
     {
-      // Append JavaScript 'Fact' File.
-      Script.AppendFile(fileName);
-
-      // Verify 'Fact'.
-      Assert.Equal("true", RunTest(context, action));
+      Script.AppendBlock(new JsAssertLibrary());
     }
-#pragma warning restore 612,618
 
-    [JavaScriptTestSuite]
-    [JavaScriptFactFile(@"..\..\TestFile3.js")]
-    public void Test(JavaScriptFact fact)
+    protected Object RunTest(String scriptBlock)
     {
-      // Append JavaScript 'Fact' File.
-      Script.AppendFile(fact.TestFile);
-
-      // Verify 'Fact'.
-      Assert.Equal("true", RunTest(fact));
+      return JsonConvert.DeserializeObject(Script.RunTest(scriptBlock));
     }
   }
 }

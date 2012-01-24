@@ -21,6 +21,7 @@ using Xunit.Extensions;
 
 namespace JSTest.Integration.Xunit
 {
+  [Obsolete("Replace with JavaScriptFactFileAttribute")]
   [AttributeUsage(AttributeTargets.Method, Inherited = true, AllowMultiple = true)]
   public class JavaScriptTestFileAttribute : DataAttribute
   {

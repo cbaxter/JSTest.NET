@@ -1,5 +1,8 @@
 ﻿using System;
-using Xunit;
+using System.Collections.Generic;
+using System.Reflection;
+using JSTest.ScriptElements;
+using Xunit.Extensions;
 
 /* Copyright (c) 2011 CBaxter
  * 
@@ -15,37 +18,32 @@ using Xunit;
  * IN THE SOFTWARE. 
  */
 
-namespace JSTest.Integration.Xunit.Test
+namespace JSTest.Integration.Xunit
 {
-
-  public class JavaScriptTestBaseTest : JavaScriptTestBase
+  [AttributeUsage(AttributeTargets.Method, Inherited = true, AllowMultiple = true)]
+  public class JavaScriptFactFileAttribute : DataAttribute
   {
-    public JavaScriptTestBaseTest()
-      : base(true)
+    private readonly String _fileName;
+    private readonly String _testFunctionPattern;
+
+    public JavaScriptFactFileAttribute(String fileName)
+      : this(fileName, null)
     { }
 
-#pragma warning disable 612,618
-    [JavaScriptTestSuite]
-    [JavaScriptTestFile(@"..\..\TestFile3.js")]
-    public void TestLegacy(String context, String action, String fileName)
+    public JavaScriptFactFileAttribute(String fileName, String testFunctionPattern)
     {
-      // Append JavaScript 'Fact' File.
-      Script.AppendFile(fileName);
-
-      // Verify 'Fact'.
-      Assert.Equal("true", RunTest(context, action));
+      _fileName = fileName;
+      _testFunctionPattern = testFunctionPattern;
     }
-#pragma warning restore 612,618
 
-    [JavaScriptTestSuite]
-    [JavaScriptFactFile(@"..\..\TestFile3.js")]
-    public void Test(JavaScriptFact fact)
+    public override IEnumerable<Object[]> GetData(MethodInfo methodUnderTest, Type[] parameterTypes)
     {
-      // Append JavaScript 'Fact' File.
-      Script.AppendFile(fact.TestFile);
+      var result = new List<Object[]>();
 
-      // Verify 'Fact'.
-      Assert.Equal("true", RunTest(fact));
+      foreach (var testCase in TestCase.LoadFrom(_fileName, _testFunctionPattern))
+        result.Add(new Object[] { new JavaScriptFact(testCase) });
+
+      return result;
     }
   }
 }

@@ -1,5 +1,6 @@
-﻿using System;
-using Xunit;
+﻿using JSTest.ScriptElements;
+using JSTest.ScriptLibraries;
+using NUnit.Framework;
 
 /* Copyright (c) 2011 CBaxter
  * 
@@ -15,37 +16,32 @@ using Xunit;
  * IN THE SOFTWARE. 
  */
 
-namespace JSTest.Integration.Xunit.Test
+namespace JSTest.Examples.Nunit.Style1
 {
-
-  public class JavaScriptTestBaseTest : JavaScriptTestBase
+  [TestFixture]
+  public class UsingCookieContainer
   {
-    public JavaScriptTestBaseTest()
-      : base(true)
-    { }
+    [Datapoints]
+    public readonly TestCase[] WhenGettingCookies = TestCase.LoadFrom(@"..\..\whenGettingCookies.js");
 
-#pragma warning disable 612,618
-    [JavaScriptTestSuite]
-    [JavaScriptTestFile(@"..\..\TestFile3.js")]
-    public void TestLegacy(String context, String action, String fileName)
+    [Datapoints]
+    public readonly TestCase[] WhenSettingCookies = TestCase.LoadFrom(@"..\..\whenSettingCookies.js");
+    
+    [Theory]
+    public void Test(TestCase testCase)
     {
-      // Append JavaScript 'Fact' File.
-      Script.AppendFile(fileName);
+      var script = new TestScript { IncludeDefaultBreakpoint = false };
 
-      // Verify 'Fact'.
-      Assert.Equal("true", RunTest(context, action));
-    }
-#pragma warning restore 612,618
+      // Append required JavaScript libraries.
+      script.AppendBlock(new JsAssertLibrary());
 
-    [JavaScriptTestSuite]
-    [JavaScriptFactFile(@"..\..\TestFile3.js")]
-    public void Test(JavaScriptFact fact)
-    {
-      // Append JavaScript 'Fact' File.
-      Script.AppendFile(fact.TestFile);
+      // Append required JavaScript Files.
+      script.AppendFile(@"..\..\dateExtensions.js");
+      script.AppendFile(@"..\..\cookieContainer.js");
+      script.AppendFile(testCase.TestFile);
 
-      // Verify 'Fact'.
-      Assert.Equal("true", RunTest(fact));
+      // Run 'Test'.
+      script.RunTest(testCase);
     }
   }
 }
