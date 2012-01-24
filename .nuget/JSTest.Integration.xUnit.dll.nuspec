@@ -13,7 +13,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>JSTest.NET is a lightweight managed wrapper around the Windows Script Host (CScript.exe) available on any Windows machine. JSTest.NET enables JavaScript unit tests to be run directly in the test framework of your choice (MSTest, NUnit, xUnit, etc) without the need for a web browser. JSTest.NET is focused on testing JavaScript, and NOT on UI validation.</description>
     <dependencies>
-      <dependency id="JSTest.NET" version="1.0.5" />
+      <dependency id="JSTest.NET" version="1.0.6" />
       <dependency id="xunit" version="1.8.0.1549" />
       <dependency id="xunit.extensions" version="1.8.0.1549" />
     </dependencies>
