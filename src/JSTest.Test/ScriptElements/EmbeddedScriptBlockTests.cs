@@ -1,6 +1,5 @@
-﻿using System;
-using System.IO;
-using System.Reflection;
+﻿using JSTest.ScriptElements;
+using Xunit;
 
 /* Copyright (c) 2011 CBaxter
  * 
@@ -16,24 +15,23 @@ using System.Reflection;
  * IN THE SOFTWARE. 
  */
 
-namespace JSTest.ScriptElements
+namespace JSTest.Test.ScriptElements
 {
-  public abstract class EmbeddedScriptBlock : ScriptBlock
+  public class EmbeddedScriptBlockTests
   {
-    protected EmbeddedScriptBlock(Assembly assembly, String resourceName)
-      : base(GetManifestResource(assembly, resourceName))
-    { }
-
-    private static String GetManifestResource(Assembly assembly, String resourceName)
+    [Fact]
+    public void ThrowMeaninfulExceptionIfEmbeddedResourceNotFound()
     {
-      using (var stream = assembly.GetManifestResourceStream(resourceName))
-      {
-        if (stream == null)
-          throw new MissingEmbeddedResourceException();
+      var ex = Assert.Throws<MissingEmbeddedResourceException>(() => new MissingEmbeddedScript());
 
-          using (var reader = new StreamReader(stream))
-            return reader.ReadToEnd();
-      }
+      Assert.Equal("Unable to find embedded resource.", ex.Message);
+    }
+
+    private class MissingEmbeddedScript : EmbeddedScriptBlock
+    {
+      public MissingEmbeddedScript()
+        : base(typeof(MissingEmbeddedScript).Assembly, "JSTest.Test.ScriptLibraries.MissingEmbeddedScript")
+      { }
     }
   }
 }
