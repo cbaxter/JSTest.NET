@@ -16,10 +16,10 @@
 
 namespace JSTest.ScriptLibraries
 {
-  internal sealed class JsonLibrary : EmbeddedScriptBlock
-  {
-    public JsonLibrary()
-      : base(typeof(JsonLibrary).Assembly,  "JSTest.Scripts.json2.js")
-    { }
-  }
+    internal sealed class JsonLibrary : EmbeddedScriptBlock
+    {
+        public JsonLibrary()
+            : base(typeof(JsonLibrary).Assembly, "JSTest.Scripts.json2.js")
+        { }
+    }
 }

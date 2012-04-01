@@ -16,10 +16,10 @@
 
 namespace JSTest.ScriptLibraries
 {
-  public sealed class JsMockitoLibrary : EmbeddedScriptBlock
-  {
-    public JsMockitoLibrary()
-      : base(typeof(JsMockitoLibrary).Assembly, "JSTest.Scripts.jsmockito.js")
-    { }
-  }
+    public sealed class JsMockitoLibrary : EmbeddedScriptBlock
+    {
+        public JsMockitoLibrary()
+            : base(typeof(JsMockitoLibrary).Assembly, "JSTest.Scripts.jsmockito.js")
+        { }
+    }
 }

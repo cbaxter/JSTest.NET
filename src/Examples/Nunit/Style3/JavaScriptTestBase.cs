@@ -18,13 +18,13 @@ using Newtonsoft.Json;
 
 namespace JSTest.Examples.Nunit.Style3
 {
-  public abstract class JavaScriptTestBase
-  {
-    protected TestScript Script { get; set; }
-    
-    protected Object RunTest(String scriptBlock)
+    public abstract class JavaScriptTestBase
     {
-      return JsonConvert.DeserializeObject(Script.RunTest(scriptBlock));
+        protected TestScript Script { get; set; }
+
+        protected Object RunTest(String scriptBlock)
+        {
+            return JsonConvert.DeserializeObject(Script.RunTest(scriptBlock));
+        }
     }
-  }
 }

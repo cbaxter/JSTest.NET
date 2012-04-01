@@ -17,27 +17,27 @@ using Xunit;
 
 namespace JSTest.Test.ScriptLibraries
 {
-  public class WhenUsingJsHamcrestLibrary
-  {
-    [Fact]
-    public void RunsInCScript()
+    public class WhenUsingJsHamcrestLibrary
     {
-      var script = new TestScript();
+        [Fact]
+        public void RunsInCScript()
+        {
+            var script = new TestScript();
 
-      script.AppendBlock(new JsHamcrestLibrary());
+            script.AppendBlock(new JsHamcrestLibrary());
 
-      Assert.DoesNotThrow(() => script.RunTest(ScriptResources.JsHamcrestSampleTest));
+            Assert.DoesNotThrow(() => script.RunTest(ScriptResources.JsHamcrestSampleTest));
+        }
+
+        [Fact]
+        public void IgnoresMultipleRegistrations()
+        {
+            var script = new TestScript();
+
+            script.AppendBlock(new JsHamcrestLibrary());
+            script.AppendBlock(new JsHamcrestLibrary());
+
+            Assert.DoesNotThrow(() => script.RunTest(ScriptResources.JsHamcrestSampleTest));
+        }
     }
-
-    [Fact]
-    public void IgnoresMultipleRegistrations()
-    {
-      var script = new TestScript();
-
-      script.AppendBlock(new JsHamcrestLibrary());
-      script.AppendBlock(new JsHamcrestLibrary());
-
-      Assert.DoesNotThrow(() => script.RunTest(ScriptResources.JsHamcrestSampleTest));
-    }
-  }
 }

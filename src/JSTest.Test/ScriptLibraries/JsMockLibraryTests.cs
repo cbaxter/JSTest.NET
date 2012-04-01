@@ -17,29 +17,29 @@ using Xunit;
 
 namespace JSTest.Test.ScriptLibraries
 {
-  public class WhenUsingJsMockLibrary
-  {
-    [Fact]
-    public void RunsInCScript()
+    public class WhenUsingJsMockLibrary
     {
-      var script = new TestScript();
+        [Fact]
+        public void RunsInCScript()
+        {
+            var script = new TestScript();
 
-      script.AppendBlock(new JsMockLibrary());
-      script.AppendBlock(ScriptResources.JsMockSampleTestScriptBlock);
+            script.AppendBlock(new JsMockLibrary());
+            script.AppendBlock(ScriptResources.JsMockSampleTestScriptBlock);
 
-      Assert.DoesNotThrow(() => script.RunTest(ScriptResources.JsMockSampleTest));
+            Assert.DoesNotThrow(() => script.RunTest(ScriptResources.JsMockSampleTest));
+        }
+
+        [Fact]
+        public void IgnoresMultipleRegistrations()
+        {
+            var script = new TestScript();
+
+            script.AppendBlock(new JsMockLibrary());
+            script.AppendBlock(new JsMockLibrary());
+            script.AppendBlock(ScriptResources.JsMockSampleTestScriptBlock);
+
+            Assert.DoesNotThrow(() => script.RunTest(ScriptResources.JsMockSampleTest));
+        }
     }
-
-    [Fact]
-    public void IgnoresMultipleRegistrations()
-    {
-      var script = new TestScript();
-
-      script.AppendBlock(new JsMockLibrary());
-      script.AppendBlock(new JsMockLibrary());
-      script.AppendBlock(ScriptResources.JsMockSampleTestScriptBlock);
-
-      Assert.DoesNotThrow(() => script.RunTest(ScriptResources.JsMockSampleTest));
-    }
-  }
 }

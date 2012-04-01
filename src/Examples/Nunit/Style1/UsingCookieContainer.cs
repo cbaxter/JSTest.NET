@@ -18,30 +18,30 @@ using NUnit.Framework;
 
 namespace JSTest.Examples.Nunit.Style1
 {
-  [TestFixture]
-  public class UsingCookieContainer
-  {
-    [Datapoints]
-    public readonly TestCase[] WhenGettingCookies = TestCase.LoadFrom(@"..\..\whenGettingCookies.js");
-
-    [Datapoints]
-    public readonly TestCase[] WhenSettingCookies = TestCase.LoadFrom(@"..\..\whenSettingCookies.js");
-    
-    [Theory]
-    public void Test(TestCase testCase)
+    [TestFixture]
+    public class UsingCookieContainer
     {
-      var script = new TestScript { IncludeDefaultBreakpoint = false };
+        [Datapoints]
+        public readonly TestCase[] WhenGettingCookies = TestCase.LoadFrom(@"..\..\whenGettingCookies.js");
 
-      // Append required JavaScript libraries.
-      script.AppendBlock(new JsAssertLibrary());
+        [Datapoints]
+        public readonly TestCase[] WhenSettingCookies = TestCase.LoadFrom(@"..\..\whenSettingCookies.js");
 
-      // Append required JavaScript Files.
-      script.AppendFile(@"..\..\dateExtensions.js");
-      script.AppendFile(@"..\..\cookieContainer.js");
-      script.AppendFile(testCase.TestFile);
+        [Theory]
+        public void Test(TestCase testCase)
+        {
+            var script = new TestScript { IncludeDefaultBreakpoint = false };
 
-      // Run 'Test'.
-      script.RunTest(testCase);
+            // Append required JavaScript libraries.
+            script.AppendBlock(new JsAssertLibrary());
+
+            // Append required JavaScript Files.
+            script.AppendFile(@"..\..\dateExtensions.js");
+            script.AppendFile(@"..\..\cookieContainer.js");
+            script.AppendFile(testCase.TestFile);
+
+            // Run 'Test'.
+            script.RunTest(testCase);
+        }
     }
-  }
 }

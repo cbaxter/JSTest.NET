@@ -16,10 +16,10 @@
 
 namespace JSTest.ScriptElements
 {
-  internal class TestExecutor : ScriptBlock
-  {
-    private const String UnformattedScriptBlock =
-      @"(function () {{
+    internal class TestExecutor : ScriptBlock
+    {
+        private const String UnformattedScriptBlock =
+          @"(function () {{
   try {{
     WScript.Echo(JSON.stringify((function () {{
       // START TEST BLOCK //
@@ -37,12 +37,12 @@ namespace JSTest.ScriptElements
   }}
 }})();";
 
-    public TestExecutor(String test)
-      : base(String.Format(UnformattedScriptBlock, String.Empty, test, String.Empty))
-    { }
+        public TestExecutor(String test)
+            : base(String.Format(UnformattedScriptBlock, String.Empty, test, String.Empty))
+        { }
 
-    public TestExecutor(String setup, String test, String teardown)
-      : base(String.Format(UnformattedScriptBlock, setup, test, teardown))
-    { }
-  }
+        public TestExecutor(String setup, String test, String teardown)
+            : base(String.Format(UnformattedScriptBlock, setup, test, teardown))
+        { }
+    }
 }

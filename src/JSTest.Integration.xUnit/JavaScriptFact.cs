@@ -16,10 +16,10 @@
 
 namespace JSTest.Integration.Xunit
 {
-  public class JavaScriptFact : TestCase
-  {
-    internal JavaScriptFact(TestCase testCase)
-      : base(testCase.TestFile, testCase.TestFunction)
-    { }
-  }
+    public class JavaScriptFact : TestCase
+    {
+        internal JavaScriptFact(TestCase testCase)
+            : base(testCase.TestFile, testCase.TestFunction)
+        { }
+    }
 }

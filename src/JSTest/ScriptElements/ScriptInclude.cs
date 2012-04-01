@@ -17,23 +17,23 @@ using System.IO;
 
 namespace JSTest.ScriptElements
 {
-  public class ScriptInclude : ScriptElement
-  {
-    private readonly FileInfo _fileInfo;
-
-    public ScriptInclude(String fileName)
+    public class ScriptInclude : ScriptElement
     {
-      Verify.NotWhiteSpace(fileName, "fileName");
+        private readonly FileInfo _fileInfo;
 
-      _fileInfo = new FileInfo(fileName);
+        public ScriptInclude(String fileName)
+        {
+            Verify.NotWhiteSpace(fileName, "fileName");
 
-      if (!_fileInfo.Exists)
-        throw new FileNotFoundException("Unable to find the specified file.", fileName);
+            _fileInfo = new FileInfo(fileName);
+
+            if (!_fileInfo.Exists)
+                throw new FileNotFoundException("Unable to find the specified file.", fileName);
+        }
+
+        public override String ToScriptFragment()
+        {
+            return String.Format("<script language='JavaScript' src='{0}'></script>", _fileInfo.FullName);
+        }
     }
-
-    public override String ToScriptFragment()
-    {
-      return String.Format("<script language='JavaScript' src='{0}'></script>", _fileInfo.FullName);
-    }
-  }
 }

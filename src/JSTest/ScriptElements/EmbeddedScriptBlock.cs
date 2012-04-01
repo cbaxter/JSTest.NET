@@ -18,22 +18,22 @@ using System.Reflection;
 
 namespace JSTest.ScriptElements
 {
-  public abstract class EmbeddedScriptBlock : ScriptBlock
-  {
-    protected EmbeddedScriptBlock(Assembly assembly, String resourceName)
-      : base(GetManifestResource(assembly, resourceName))
-    { }
-
-    private static String GetManifestResource(Assembly assembly, String resourceName)
+    public abstract class EmbeddedScriptBlock : ScriptBlock
     {
-      using (var stream = assembly.GetManifestResourceStream(resourceName))
-      {
-        if (stream == null)
-          throw new MissingEmbeddedResourceException();
+        protected EmbeddedScriptBlock(Assembly assembly, String resourceName)
+            : base(GetManifestResource(assembly, resourceName))
+        { }
 
-          using (var reader = new StreamReader(stream))
-            return reader.ReadToEnd();
-      }
+        private static String GetManifestResource(Assembly assembly, String resourceName)
+        {
+            using (var stream = assembly.GetManifestResourceStream(resourceName))
+            {
+                if (stream == null)
+                    throw new MissingEmbeddedResourceException();
+
+                using (var reader = new StreamReader(stream))
+                    return reader.ReadToEnd();
+            }
+        }
     }
-  }
 }

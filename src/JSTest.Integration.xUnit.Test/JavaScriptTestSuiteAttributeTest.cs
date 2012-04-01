@@ -17,12 +17,12 @@ using Xunit.Extensions;
 
 namespace JSTest.Integration.Xunit.Test
 {
-  public class JavaScriptTestSuiteAttribute : TheoryAttribute
-  {
-    [Fact]
-    public void JavaScriptTestSuiteIsXunitTheory()
+    public class JavaScriptTestSuiteAttribute : TheoryAttribute
     {
-      Assert.True(typeof(TheoryAttribute).IsAssignableFrom(typeof(JavaScriptTestSuiteAttribute)));
+        [Fact]
+        public void JavaScriptTestSuiteIsXunitTheory()
+        {
+            Assert.True(typeof(TheoryAttribute).IsAssignableFrom(typeof(JavaScriptTestSuiteAttribute)));
+        }
     }
-  }
 }

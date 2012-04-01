@@ -17,27 +17,27 @@ using Xunit;
 
 namespace JSTest.Test.ScriptLibraries
 {
-  public class WhenUsingJsonLibrary
-  {
-    [Fact]
-    public void RunsInCScript()
+    public class WhenUsingJsonLibrary
     {
-      var script = new TestScript();
+        [Fact]
+        public void RunsInCScript()
+        {
+            var script = new TestScript();
 
-      script.AppendBlock(new JsonLibrary());
+            script.AppendBlock(new JsonLibrary());
 
-      Assert.Equal("\"1\"", script.RunTest("return JSON.stringify(JSON.parse('1'));"));
+            Assert.Equal("\"1\"", script.RunTest("return JSON.stringify(JSON.parse('1'));"));
+        }
+
+        [Fact]
+        public void IgnoresMultipleRegistrations()
+        {
+            var script = new TestScript();
+
+            script.AppendBlock(new JsonLibrary());
+            script.AppendBlock(new JsonLibrary());
+
+            Assert.Equal("\"1\"", script.RunTest("return JSON.stringify(1);"));
+        }
     }
-
-    [Fact]
-    public void IgnoresMultipleRegistrations()
-    {
-      var script = new TestScript();
-
-      script.AppendBlock(new JsonLibrary());
-      script.AppendBlock(new JsonLibrary());
-
-      Assert.Equal("\"1\"", script.RunTest("return JSON.stringify(1);"));
-    }
-  }
 }

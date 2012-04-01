@@ -17,7 +17,7 @@ using Xunit.Extensions;
 
 namespace JSTest.Integration.Xunit
 {
-  [AttributeUsage(AttributeTargets.Method, Inherited = true, AllowMultiple = false)]
-  public class JavaScriptTestSuiteAttribute : TheoryAttribute
-  { }
+    [AttributeUsage(AttributeTargets.Method, Inherited = true, AllowMultiple = false)]
+    public class JavaScriptTestSuiteAttribute : TheoryAttribute
+    { }
 }

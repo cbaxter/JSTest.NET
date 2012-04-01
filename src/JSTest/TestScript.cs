@@ -21,92 +21,92 @@ using JSTest.ScriptLibraries;
 
 namespace JSTest
 {
-  public class TestScript
-  {
-    private const String NoAction = "";
-    private const String Breakpoint = "debugger;";
-    private readonly StringBuilder _script = new StringBuilder();
-    private readonly ICScriptCommand _cscriptCommand;
-
-    public Boolean IncludeDefaultBreakpoint { get; set; }
-
-    public TestScript()
-      : this(TimeSpan.FromSeconds(10))
-    { }
-
-    public TestScript(TimeSpan timeout)
-      : this(new CScriptCommand(timeout))
-    { }
-
-    internal TestScript(ICScriptCommand cscriptCommand)
+    public class TestScript
     {
-      IncludeDefaultBreakpoint = true;
+        private const String NoAction = "";
+        private const String Breakpoint = "debugger;";
+        private readonly StringBuilder _script = new StringBuilder();
+        private readonly ICScriptCommand _cscriptCommand;
 
-      _cscriptCommand = cscriptCommand;
-    }
+        public Boolean IncludeDefaultBreakpoint { get; set; }
 
-    public void AppendBlock(String scriptBlock)
-    {
-      AppendBlock(new ScriptBlock(scriptBlock));
-    }
+        public TestScript()
+            : this(TimeSpan.FromSeconds(10))
+        { }
 
-    public void AppendBlock(ScriptBlock scriptBlock)
-    {
-      Verify.NotNull(scriptBlock, "scriptBlock");
+        public TestScript(TimeSpan timeout)
+            : this(new CScriptCommand(timeout))
+        { }
 
-      _script.AppendLine(scriptBlock.ToScriptFragment());
-    }
-
-    public void AppendFile(String fileName)
-    {
-      _script.AppendLine(new ScriptInclude(fileName));
-    }
-
-    public void AppendFile(ScriptInclude scriptInclude)
-    {
-      Verify.NotNull(scriptInclude, "scriptInclude");
-
-      _script.AppendLine(scriptInclude.ToScriptFragment());
-    }
-
-    public String RunTest(TestCase testCase)
-    {
-      Verify.NotNull(testCase, "testCase");
-
-      return RunTest(testCase.ToScriptFragment());
-    }
-
-    public String RunTest(String testScript)
-    {
-      return RunTest(new TestExecutor(IncludeDefaultBreakpoint ? Breakpoint : NoAction, testScript, NoAction));
-    }
-
-    private String RunTest(TestExecutor testExecutor)
-    {
-      String scriptFile = Path.ChangeExtension(Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString()), ".wsf");
-
-      try
-      {
-        using (var writer = new StreamWriter(scriptFile))
+        internal TestScript(ICScriptCommand cscriptCommand)
         {
-          writer.WriteLine(String.Format("<job id='UnitTest'>"));
-          writer.Write(this);
-          writer.WriteLine(new JsonLibrary());
-          writer.WriteLine(testExecutor);
-          writer.WriteLine("</job>");
+            IncludeDefaultBreakpoint = true;
+
+            _cscriptCommand = cscriptCommand;
         }
 
-        return Debugger.IsAttached ? _cscriptCommand.Debug(scriptFile) : _cscriptCommand.Run(scriptFile);
-      }
-      finally
-      {
-        File.Delete(scriptFile);
-      }
-    }
+        public void AppendBlock(String scriptBlock)
+        {
+            AppendBlock(new ScriptBlock(scriptBlock));
+        }
 
-    public override string ToString()
-    {
-      return _script.ToString();
+        public void AppendBlock(ScriptBlock scriptBlock)
+        {
+            Verify.NotNull(scriptBlock, "scriptBlock");
+
+            _script.AppendLine(scriptBlock.ToScriptFragment());
+        }
+
+        public void AppendFile(String fileName)
+        {
+            _script.AppendLine(new ScriptInclude(fileName));
+        }
+
+        public void AppendFile(ScriptInclude scriptInclude)
+        {
+            Verify.NotNull(scriptInclude, "scriptInclude");
+
+            _script.AppendLine(scriptInclude.ToScriptFragment());
+        }
+
+        public String RunTest(TestCase testCase)
+        {
+            Verify.NotNull(testCase, "testCase");
+
+            return RunTest(testCase.ToScriptFragment());
+        }
+
+        public String RunTest(String testScript)
+        {
+            return RunTest(new TestExecutor(IncludeDefaultBreakpoint ? Breakpoint : NoAction, testScript, NoAction));
+        }
+
+        private String RunTest(TestExecutor testExecutor)
+        {
+            String scriptFile = Path.ChangeExtension(Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString()), ".wsf");
+
+            try
+            {
+                using (var writer = new StreamWriter(scriptFile))
+                {
+                    writer.WriteLine(String.Format("<job id='UnitTest'>"));
+                    writer.Write(this);
+                    writer.WriteLine(new JsonLibrary());
+                    writer.WriteLine(testExecutor);
+                    writer.WriteLine("</job>");
+                }
+
+                return Debugger.IsAttached ? _cscriptCommand.Debug(scriptFile) : _cscriptCommand.Run(scriptFile);
+            }
+            finally
+            {
+                File.Delete(scriptFile);
+            }
+        }
+
+        public override string ToString()
+        {
+            return _script.ToString();
+        }
     }
-  }
 }

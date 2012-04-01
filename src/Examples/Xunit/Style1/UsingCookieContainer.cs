@@ -17,28 +17,28 @@ using JSTest.ScriptLibraries;
 
 namespace JSTest.Examples.Xunit.Style1
 {
-  public class UsingCookieContainer : JavaScriptTestBase
-  {
-    public UsingCookieContainer()
+    public class UsingCookieContainer : JavaScriptTestBase
     {
-      // Append required JavaScript libraries.
-      Script.AppendBlock(new JsAssertLibrary());
+        public UsingCookieContainer()
+        {
+            // Append required JavaScript libraries.
+            Script.AppendBlock(new JsAssertLibrary());
 
-      // Append required JavaScript Files.
-      Script.AppendFile(@"..\..\dateExtensions.js");
-      Script.AppendFile(@"..\..\cookieContainer.js");
+            // Append required JavaScript Files.
+            Script.AppendFile(@"..\..\dateExtensions.js");
+            Script.AppendFile(@"..\..\cookieContainer.js");
+        }
+
+        [JavaScriptTestSuite]
+        [JavaScriptFactFile(@"..\..\whenGettingCookies.js")]
+        [JavaScriptFactFile(@"..\..\whenSettingCookies.js")]
+        public void Test(JavaScriptFact fact)
+        {
+            // Append JavaScript 'Fact' File.
+            Script.AppendFile(fact.TestFile);
+
+            // Verify 'Fact'.
+            RunTest(fact);
+        }
     }
-
-    [JavaScriptTestSuite]
-    [JavaScriptFactFile(@"..\..\whenGettingCookies.js")]
-    [JavaScriptFactFile(@"..\..\whenSettingCookies.js")]
-    public void Test(JavaScriptFact fact)
-    {
-      // Append JavaScript 'Fact' File.
-      Script.AppendFile(fact.TestFile);
-
-      // Verify 'Fact'.
-      RunTest(fact);
-    }
-  }
 }

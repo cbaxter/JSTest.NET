@@ -19,36 +19,36 @@ using Xunit.Extensions;
 
 namespace JSTest.Test.ScriptElements
 {
-  public class WhenCreatingTestExecutor
-  {
-    [Theory, InlineData(null), InlineData(""), InlineData(" "), InlineData("\r\n")]
-    public void AllowWhitespaceOnly(String scriptBlock)
+    public class WhenCreatingTestExecutor
     {
-      Assert.DoesNotThrow(() => new TestExecutor(scriptBlock));
-    }
-  }
-
-  public class WhenConvertingTestExecutorToString
-  {
-    [Fact]
-    public void WrapScriptBlockWithTestRunnerJavaScript()
-    {
-      var testExecutor = new TestExecutor("function myFunction() { }");
-
-      Assert.Equal(
-        String.Format(ScriptResources.TestExecutorScriptBlockFormat, String.Empty, "function myFunction() { }", String.Empty), 
-        testExecutor.ToScriptFragment()
-      );
+        [Theory, InlineData(null), InlineData(""), InlineData(" "), InlineData("\r\n")]
+        public void AllowWhitespaceOnly(String scriptBlock)
+        {
+            Assert.DoesNotThrow(() => new TestExecutor(scriptBlock));
+        }
     }
 
-    [Fact]
-    public void CanImplicitlyConvertToString()
+    public class WhenConvertingTestExecutorToString
     {
-      var scriptBlock = new TestExecutor("function myFunction() { }");
+        [Fact]
+        public void WrapScriptBlockWithTestRunnerJavaScript()
+        {
+            var testExecutor = new TestExecutor("function myFunction() { }");
 
-      String script = scriptBlock;
+            Assert.Equal(
+              String.Format(ScriptResources.TestExecutorScriptBlockFormat, String.Empty, "function myFunction() { }", String.Empty),
+              testExecutor.ToScriptFragment()
+            );
+        }
 
-      Assert.Equal(scriptBlock.ToScriptFragment(), script);
+        [Fact]
+        public void CanImplicitlyConvertToString()
+        {
+            var scriptBlock = new TestExecutor("function myFunction() { }");
+
+            String script = scriptBlock;
+
+            Assert.Equal(scriptBlock.ToScriptFragment(), script);
+        }
     }
-  }
 }

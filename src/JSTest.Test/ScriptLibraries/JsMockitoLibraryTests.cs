@@ -17,29 +17,29 @@ using Xunit;
 
 namespace JSTest.Test.ScriptLibraries
 {
-  public class WhenUsingJsMockitoLibrary
-  {
-    [Fact]
-    public void RunsInCScript()
+    public class WhenUsingJsMockitoLibrary
     {
-      var script = new TestScript();
+        [Fact]
+        public void RunsInCScript()
+        {
+            var script = new TestScript();
 
-      script.AppendBlock(new JsHamcrestLibrary());
-      script.AppendBlock(new JsMockitoLibrary());
+            script.AppendBlock(new JsHamcrestLibrary());
+            script.AppendBlock(new JsMockitoLibrary());
 
-      Assert.DoesNotThrow(() => script.RunTest(ScriptResources.JsMockitoSampleTest));
+            Assert.DoesNotThrow(() => script.RunTest(ScriptResources.JsMockitoSampleTest));
+        }
+
+        [Fact]
+        public void IgnoresMultipleRegistrations()
+        {
+            var script = new TestScript();
+
+            script.AppendBlock(new JsHamcrestLibrary());
+            script.AppendBlock(new JsMockitoLibrary());
+            script.AppendBlock(new JsMockitoLibrary());
+
+            Assert.DoesNotThrow(() => script.RunTest(ScriptResources.JsMockitoSampleTest));
+        }
     }
-
-    [Fact]
-    public void IgnoresMultipleRegistrations()
-    {
-      var script = new TestScript();
-
-      script.AppendBlock(new JsHamcrestLibrary());
-      script.AppendBlock(new JsMockitoLibrary());
-      script.AppendBlock(new JsMockitoLibrary());
-
-      Assert.DoesNotThrow(() => script.RunTest(ScriptResources.JsMockitoSampleTest));
-    }
-  }
 }

@@ -20,75 +20,75 @@ using Xunit;
 
 namespace JSTest.Integration.Xunit.Test
 {
-  public class JavaScriptFactFileAttributeTest
-  {
-    [Fact]
-    public void ThrowFileNotFoundExceptionIfFileDoesNotExist()
+    public class JavaScriptFactFileAttributeTest
     {
-      var attribute = new JavaScriptFactFileAttribute(@"..\..\DoesNotExist.js");
+        [Fact]
+        public void ThrowFileNotFoundExceptionIfFileDoesNotExist()
+        {
+            var attribute = new JavaScriptFactFileAttribute(@"..\..\DoesNotExist.js");
 
-      Assert.Throws<FileNotFoundException>(() => GetFacts(attribute));
+            Assert.Throws<FileNotFoundException>(() => GetFacts(attribute));
+        }
+
+        [Fact]
+        public void AllNamedFunctionsAreTestsByDefault()
+        {
+            var attribute = new JavaScriptFactFileAttribute(@"..\..\TestFile1.js");
+
+            Assert.Equal(7, GetFacts(attribute).Count());
+        }
+
+        [Fact]
+        public void ThrowArgumentExceptionOnBadRegexExpression()
+        {
+            var attribute = new JavaScriptFactFileAttribute(@"..\..\TestFile1.js", "(");
+
+            Assert.Throws<ArgumentException>(() => GetFacts(attribute));
+        }
+
+        [Fact]
+        public void UseCustomExpressionIfSpecified()
+        {
+            var attribute = new JavaScriptFactFileAttribute(@"..\..\TestFile2.js", @"test_[\w\d]+");
+
+            Assert.Equal(4, GetFacts(attribute).Count());
+        }
+
+        [Fact]
+        public void TestNameIsFileNameWithoutExtensionAndFunctionName()
+        {
+            var attribute = new JavaScriptFactFileAttribute(@"..\..\TestFile1.js");
+
+            Assert.Equal("TestFile1.function1", GetFacts(attribute).First().TestName);
+        }
+
+        [Fact]
+        public void TestFunctionIsFunctionNameOnlyIfDefaultPattern()
+        {
+            var attribute = new JavaScriptFactFileAttribute(@"..\..\TestFile1.js");
+
+            Assert.Equal("function1", GetFacts(attribute).First().TestFunction);
+        }
+
+        [Fact]
+        public void TestFunctionIsFunctionNameOnlyIfCustomPattern()
+        {
+            var attribute = new JavaScriptFactFileAttribute(@"..\..\TestFile2.js", @"test_[\w\d]+");
+
+            Assert.Equal("test_function1", GetFacts(attribute).First().TestFunction);
+        }
+
+        [Fact]
+        public void FileNameIsSameForAllTestsInFile()
+        {
+            var attribute = new JavaScriptFactFileAttribute(@"..\..\TestFile1.js");
+
+            Assert.True(GetFacts(attribute).All(fact => fact.TestFile.Equals(@"..\..\TestFile1.js")));
+        }
+
+        private static IEnumerable<JavaScriptFact> GetFacts(JavaScriptFactFileAttribute attribute)
+        {
+            return attribute.GetData(null, null).Select(args => args.Single()).Cast<JavaScriptFact>();
+        }
     }
-
-    [Fact]
-    public void AllNamedFunctionsAreTestsByDefault()
-    {
-      var attribute = new JavaScriptFactFileAttribute(@"..\..\TestFile1.js");
-
-      Assert.Equal(7, GetFacts(attribute).Count());
-    }
-
-    [Fact]
-    public void ThrowArgumentExceptionOnBadRegexExpression()
-    {
-      var attribute = new JavaScriptFactFileAttribute(@"..\..\TestFile1.js", "(");
-
-      Assert.Throws<ArgumentException>(() => GetFacts(attribute));
-    }
-
-    [Fact]
-    public void UseCustomExpressionIfSpecified()
-    {
-      var attribute = new JavaScriptFactFileAttribute(@"..\..\TestFile2.js", @"test_[\w\d]+");
-
-      Assert.Equal(4, GetFacts(attribute).Count());
-    }
-
-    [Fact]
-    public void TestNameIsFileNameWithoutExtensionAndFunctionName()
-    {
-      var attribute = new JavaScriptFactFileAttribute(@"..\..\TestFile1.js");
-
-      Assert.Equal("TestFile1.function1", GetFacts(attribute).First().TestName);
-    }
-
-    [Fact]
-    public void TestFunctionIsFunctionNameOnlyIfDefaultPattern()
-    {
-      var attribute = new JavaScriptFactFileAttribute(@"..\..\TestFile1.js");
-
-      Assert.Equal("function1", GetFacts(attribute).First().TestFunction);
-    }
-    
-    [Fact]
-    public void TestFunctionIsFunctionNameOnlyIfCustomPattern()
-    {
-      var attribute = new JavaScriptFactFileAttribute(@"..\..\TestFile2.js", @"test_[\w\d]+");
-
-      Assert.Equal("test_function1", GetFacts(attribute).First().TestFunction);
-    }
-
-    [Fact]
-    public void FileNameIsSameForAllTestsInFile()
-    {
-      var attribute = new JavaScriptFactFileAttribute(@"..\..\TestFile1.js");
-
-      Assert.True(GetFacts(attribute).All(fact => fact.TestFile.Equals(@"..\..\TestFile1.js")));
-    }
-
-    private static IEnumerable<JavaScriptFact> GetFacts(JavaScriptFactFileAttribute attribute)
-    {
-      return attribute.GetData(null, null).Select(args => args.Single()).Cast<JavaScriptFact>();
-    }
-  }
 }

@@ -17,21 +17,21 @@ using Xunit;
 
 namespace JSTest.Test.ScriptElements
 {
-  public class EmbeddedScriptBlockTests
-  {
-    [Fact]
-    public void ThrowMeaninfulExceptionIfEmbeddedResourceNotFound()
+    public class EmbeddedScriptBlockTests
     {
-      var ex = Assert.Throws<MissingEmbeddedResourceException>(() => new MissingEmbeddedScript());
+        [Fact]
+        public void ThrowMeaninfulExceptionIfEmbeddedResourceNotFound()
+        {
+            var ex = Assert.Throws<MissingEmbeddedResourceException>(() => new MissingEmbeddedScript());
 
-      Assert.Equal("Unable to find embedded resource.", ex.Message);
-    }
+            Assert.Equal("Unable to find embedded resource.", ex.Message);
+        }
 
-    private class MissingEmbeddedScript : EmbeddedScriptBlock
-    {
-      public MissingEmbeddedScript()
-        : base(typeof(MissingEmbeddedScript).Assembly, "JSTest.Test.ScriptLibraries.MissingEmbeddedScript")
-      { }
+        private class MissingEmbeddedScript : EmbeddedScriptBlock
+        {
+            public MissingEmbeddedScript()
+                : base(typeof(MissingEmbeddedScript).Assembly, "JSTest.Test.ScriptLibraries.MissingEmbeddedScript")
+            { }
+        }
     }
-  }
 }

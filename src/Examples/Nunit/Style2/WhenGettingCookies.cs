@@ -17,75 +17,75 @@ using NUnit.Framework;
 
 namespace JSTest.Examples.Nunit.Style2
 {
-  [TestFixture]
-  public class WhenGettingCookies
-  {
-    protected TestScript Script { get; set; }
-
-    [SetUp]
-    public void Setup()
+    [TestFixture]
+    public class WhenGettingCookies
     {
-      Script = new TestScript { IncludeDefaultBreakpoint = false };
+        protected TestScript Script { get; set; }
 
-      // Append required JavaScript libraries.
-      Script.AppendBlock(new JsAssertLibrary());
+        [SetUp]
+        public void Setup()
+        {
+            Script = new TestScript { IncludeDefaultBreakpoint = false };
 
-      // Append required JavaScript Files.
-      Script.AppendFile(@"..\..\dateExtensions.js");
-      Script.AppendFile(@"..\..\cookieContainer.js");
-      Script.AppendFile(@"..\..\whenGettingCookies.js");
+            // Append required JavaScript libraries.
+            Script.AppendBlock(new JsAssertLibrary());
 
-      // Setup JavaScript Context
-      Script.AppendBlock(@"
-                           var document = {};
-                           var cookieContainer = new CookieContainer(document);
-                         ");
+            // Append required JavaScript Files.
+            Script.AppendFile(@"..\..\dateExtensions.js");
+            Script.AppendFile(@"..\..\cookieContainer.js");
+            Script.AppendFile(@"..\..\whenGettingCookies.js");
+
+            // Setup JavaScript Context
+            Script.AppendBlock(@"
+                                 var document = {};
+                                 var cookieContainer = new CookieContainer(document);
+                               ");
+        }
+
+        [Test]
+        public void ReturnEmptyStringIfCookiesNotSet()
+        {
+            Script.RunTest(@"
+                             document.cookie = '';
+
+                             assert.equal('', cookieContainer.getCookie('MyCookie'));
+                           ");
+        }
+
+        [Test]
+        public void ReturnCookieValueIfSingleCookieDefined()
+        {
+            Script.RunTest(@"
+                             document.cookie = 'MyCookie=' + escape('Chocolate Chip') + '; expires=' + new Date().toUTCString();
+
+                             assert.equal('Chocolate Chip', cookieContainer.getCookie('MyCookie'));
+                           ");
+        }
+
+        [Test]
+        public void ReturnLastCookieValueIfMultipleCookiesDefined()
+        {
+            Script.RunTest(@"
+                             var cookie1 = 'MyCookie1=' + escape('Chocolate Chip') + '; expires=' + new Date().toUTCString();
+                             var cookie2 = 'MyCookie2=' + escape('Peanut Butter') + '; expires=' + new Date().toUTCString();
+
+                             document.cookie = cookie1 + '; ' + cookie2;
+
+                             assert.equal('Peanut Butter', cookieContainer.getCookie('MyCookie2'));
+                           ");
+        }
+
+        [Test]
+        public void ReturnCookieValueIfLikeNamedCookiesDefined()
+        {
+            Script.RunTest(@"
+                             var cookie1 = 'MyCookie=' + escape('Chocolate Chip') + '; expires=' + new Date().toUTCString();
+                             var cookie2 = 'AlsoMyCookie=' + escape('Peanut Butter') + '; expires=' + new Date().toUTCString();
+
+                             document.cookie = cookie1 + '; ' + cookie2;
+
+                             assert.equal('Chocolate Chip', cookieContainer.getCookie('MyCookie'));
+                           ");
+        }
     }
-
-    [Test]
-    public void ReturnEmptyStringIfCookiesNotSet()
-    {
-      Script.RunTest(@"
-                       document.cookie = '';
-
-                       assert.equal('', cookieContainer.getCookie('MyCookie'));
-                     ");
-    }
-
-    [Test]
-    public void ReturnCookieValueIfSingleCookieDefined()
-    {
-      Script.RunTest(@"
-                       document.cookie = 'MyCookie=' + escape('Chocolate Chip') + '; expires=' + new Date().toUTCString();
-
-                       assert.equal('Chocolate Chip', cookieContainer.getCookie('MyCookie'));
-                     ");
-    }
-
-    [Test]
-    public void ReturnLastCookieValueIfMultipleCookiesDefined()
-    {
-      Script.RunTest(@"
-                       var cookie1 = 'MyCookie1=' + escape('Chocolate Chip') + '; expires=' + new Date().toUTCString();
-                       var cookie2 = 'MyCookie2=' + escape('Peanut Butter') + '; expires=' + new Date().toUTCString();
-
-                       document.cookie = cookie1 + '; ' + cookie2;
-
-                       assert.equal('Peanut Butter', cookieContainer.getCookie('MyCookie2'));
-                     ");
-    }
-
-    [Test]
-    public void ReturnCookieValueIfLikeNamedCookiesDefined()
-    {
-      Script.RunTest(@"
-                       var cookie1 = 'MyCookie=' + escape('Chocolate Chip') + '; expires=' + new Date().toUTCString();
-                       var cookie2 = 'AlsoMyCookie=' + escape('Peanut Butter') + '; expires=' + new Date().toUTCString();
-
-                       document.cookie = cookie1 + '; ' + cookie2;
-
-                       assert.equal('Chocolate Chip', cookieContainer.getCookie('MyCookie'));
-                     ");
-    }
-  }
 }

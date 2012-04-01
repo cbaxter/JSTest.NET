@@ -20,70 +20,70 @@ using Xunit;
 
 namespace JSTest.Test.ScriptElements
 {
-  public class TestCaseTests
-  {
-    [Fact]
-    public void ThrowFileNotFoundExceptionIfFileDoesNotExist()
+    public class TestCaseTests
     {
-      Assert.Throws<FileNotFoundException>(() => TestCase.LoadFrom(@"..\..\Scripts\DoesNotExist.js"));
+        [Fact]
+        public void ThrowFileNotFoundExceptionIfFileDoesNotExist()
+        {
+            Assert.Throws<FileNotFoundException>(() => TestCase.LoadFrom(@"..\..\Scripts\DoesNotExist.js"));
+        }
+
+        [Fact]
+        public void AllNamedFunctionsAreTestsByDefault()
+        {
+            Assert.Equal(7, TestCase.LoadFrom(@"..\..\Scripts\TestFile1.js").Count());
+        }
+
+        [Fact]
+        public void ThrowArgumentExceptionOnBadRegexExpression()
+        {
+            Assert.Throws<ArgumentException>(() => TestCase.LoadFrom(@"..\..\Scripts\TestFile1.js", "("));
+        }
+
+        [Fact]
+        public void UseCustomExpressionIfSpecified()
+        {
+            Assert.Equal(4, TestCase.LoadFrom(@"..\..\Scripts\TestFile2.js", @"test_[\w\d]+").Count());
+        }
+
+        [Fact]
+        public void TestNameIsFileNameWithoutExtensionAndFunctionName()
+        {
+            Assert.Equal("TestFile1.function1", TestCase.LoadFrom(@"..\..\Scripts\TestFile1.js").First().TestName);
+        }
+
+        [Fact]
+        public void TestFunctionIsFunctionNameOnlyIfDefaultPattern()
+        {
+            Assert.Equal("function1", TestCase.LoadFrom(@"..\..\Scripts\TestFile1.js").First().TestFunction);
+        }
+
+        [Fact]
+        public void TestFunctionIsFunctionNameOnlyIfCustomPattern()
+        {
+            Assert.Equal("test_function1", TestCase.LoadFrom(@"..\..\Scripts\TestFile2.js", @"test_[\w\d]+").First().TestFunction);
+        }
+
+        [Fact]
+        public void FileNameIsSameForAllTestsInFile()
+        {
+            Assert.True(TestCase.LoadFrom(@"..\..\Scripts\TestFile1.js").All(testCase => testCase.TestFile.Equals(@"..\..\Scripts\TestFile1.js")));
+        }
+
+        [Fact]
+        public void CanImplicitlyConvertToString()
+        {
+            var testCase = new TestCase(@"..\..\Scripts\TestFile1.js", "function1");
+
+            String script = testCase;
+
+            Assert.Equal(testCase.ToScriptFragment(), script);
+        }
+
+        [Fact]
+        public void ScriptFragmentIsFunctionInvocationWithReturn()
+        {
+            Assert.Equal("return function1();", new TestCase(@"..\..\Scripts\TestFile1.js", "function1").ToScriptFragment());
+        }
     }
-
-    [Fact]
-    public void AllNamedFunctionsAreTestsByDefault()
-    {
-      Assert.Equal(7, TestCase.LoadFrom(@"..\..\Scripts\TestFile1.js").Count());
-    }
-
-    [Fact]
-    public void ThrowArgumentExceptionOnBadRegexExpression()
-    {
-      Assert.Throws<ArgumentException>(() => TestCase.LoadFrom(@"..\..\Scripts\TestFile1.js", "("));
-    }
-
-    [Fact]
-    public void UseCustomExpressionIfSpecified()
-    {
-      Assert.Equal(4, TestCase.LoadFrom(@"..\..\Scripts\TestFile2.js", @"test_[\w\d]+").Count());
-    }
-
-    [Fact]
-    public void TestNameIsFileNameWithoutExtensionAndFunctionName()
-    {
-      Assert.Equal("TestFile1.function1", TestCase.LoadFrom(@"..\..\Scripts\TestFile1.js").First().TestName);
-    }
-
-    [Fact]
-    public void TestFunctionIsFunctionNameOnlyIfDefaultPattern()
-    {
-      Assert.Equal("function1", TestCase.LoadFrom(@"..\..\Scripts\TestFile1.js").First().TestFunction);
-    }
-
-    [Fact]
-    public void TestFunctionIsFunctionNameOnlyIfCustomPattern()
-    {
-      Assert.Equal("test_function1", TestCase.LoadFrom(@"..\..\Scripts\TestFile2.js", @"test_[\w\d]+").First().TestFunction);
-    }
-
-    [Fact]
-    public void FileNameIsSameForAllTestsInFile()
-    {
-      Assert.True(TestCase.LoadFrom(@"..\..\Scripts\TestFile1.js").All(testCase => testCase.TestFile.Equals(@"..\..\Scripts\TestFile1.js")));
-    }
-
-    [Fact]
-    public void CanImplicitlyConvertToString()
-    {
-      var testCase = new TestCase(@"..\..\Scripts\TestFile1.js", "function1");
-
-      String script = testCase;
-
-      Assert.Equal(testCase.ToScriptFragment(), script);
-    }
-
-    [Fact]
-    public void ScriptFragmentIsFunctionInvocationWithReturn()
-    {
-      Assert.Equal("return function1();", new TestCase(@"..\..\Scripts\TestFile1.js", "function1").ToScriptFragment());
-    }
-  }
 }

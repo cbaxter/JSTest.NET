@@ -18,56 +18,56 @@ using NUnit.Framework;
 
 namespace JSTest.Examples.Nunit.Style3
 {
-  [TestFixture]
-  public class WhenSettingCookies : JavaScriptTestBase
-  {
-    [SetUp]
-    public void Setup()
+    [TestFixture]
+    public class WhenSettingCookies : JavaScriptTestBase
     {
-      Script = new TestScript { IncludeDefaultBreakpoint = false };
+        [SetUp]
+        public void Setup()
+        {
+            Script = new TestScript { IncludeDefaultBreakpoint = false };
 
-      // Append required JavaScript libraries.
-      Script.AppendBlock(new JsAssertLibrary());
+            // Append required JavaScript libraries.
+            Script.AppendBlock(new JsAssertLibrary());
 
-      // Append required JavaScript Files.
-      Script.AppendFile(@"..\..\dateExtensions.js");
-      Script.AppendFile(@"..\..\cookieContainer.js");
-      Script.AppendFile(@"..\..\whenSettingCookies.js");
+            // Append required JavaScript Files.
+            Script.AppendFile(@"..\..\dateExtensions.js");
+            Script.AppendFile(@"..\..\cookieContainer.js");
+            Script.AppendFile(@"..\..\whenSettingCookies.js");
 
-      // Setup JavaScript Context
-      Script.AppendBlock(@"
-                           var document = {};
-                           var cookieContainer = new CookieContainer(document);
-                         ");
+            // Setup JavaScript Context
+            Script.AppendBlock(@"
+                                 var document = {};
+                                 var cookieContainer = new CookieContainer(document);
+                               ");
+        }
+
+        [Test]
+        public void CookieDocumentSet()
+        {
+            var result = RunTest(@"
+                                   cookieContainer.setCookie('MyCookie', 'Chocolate Chip');
+
+                                   return document.cookie;
+                                 ");
+
+            Assert.AreEqual("MyCookie=Chocolate%20Chip;path=/", result);
+        }
+
+        [Test]
+        public void CookieExpirySetIfDaysSpecified()
+        {
+            const String dateFormat = "ddd, d MMM yyyy HH:mm:ss UTC";
+
+            var now = DateTime.UtcNow;
+            var result = RunTest(String.Format(@"
+                                                 var now = new Date('{0}');
+
+                                                 cookieContainer.setCookie('MyCookie', 'Chocolate Chip', 1, now);
+
+                                                 return document.cookie;
+                                               ", now.ToString(dateFormat)));
+
+            Assert.AreEqual(String.Format("MyCookie=Chocolate%20Chip;expires={0};path=/", now.AddDays(1).ToString(dateFormat)), result);
+        }
     }
-
-    [Test]
-    public void CookieDocumentSet()
-    {
-      var result = RunTest(@"
-                             cookieContainer.setCookie('MyCookie', 'Chocolate Chip');
-
-                             return document.cookie;
-                           ");
-
-      Assert.AreEqual("MyCookie=Chocolate%20Chip;path=/", result);
-    }
-
-    [Test]
-    public void CookieExpirySetIfDaysSpecified()
-    {
-      const String dateFormat = "ddd, d MMM yyyy HH:mm:ss UTC";
-
-      var now = DateTime.UtcNow;
-      var result = RunTest(String.Format(@"
-                                           var now = new Date('{0}');
-
-                                           cookieContainer.setCookie('MyCookie', 'Chocolate Chip', 1, now);
-
-                                           return document.cookie;
-                                         ", now.ToString(dateFormat)));
-
-      Assert.AreEqual(String.Format("MyCookie=Chocolate%20Chip;expires={0};path=/", now.AddDays(1).ToString(dateFormat)), result);
-    }
-  }
 }

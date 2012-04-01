@@ -16,10 +16,10 @@
 
 namespace JSTest.ScriptLibraries
 {
-  public sealed class JsAssertLibrary : EmbeddedScriptBlock
-  {
-    public JsAssertLibrary()
-      : base(typeof(JsAssertLibrary).Assembly, "JSTest.Scripts.jsassert.js")
-    { }
-  }
+    public sealed class JsAssertLibrary : EmbeddedScriptBlock
+    {
+        public JsAssertLibrary()
+            : base(typeof(JsAssertLibrary).Assembly, "JSTest.Scripts.jsassert.js")
+        { }
+    }
 }

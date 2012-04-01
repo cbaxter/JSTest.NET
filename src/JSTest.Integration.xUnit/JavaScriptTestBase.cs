@@ -16,46 +16,46 @@
 
 namespace JSTest.Integration.Xunit
 {
-  public abstract class JavaScriptTestBase
-  {
-    protected readonly TestScript Script;
-
-    protected JavaScriptTestBase()
-      : this(false)
-    { }
-
-    protected JavaScriptTestBase(Boolean includeDefaultBreakpoint)
+    public abstract class JavaScriptTestBase
     {
-      Script = new TestScript { IncludeDefaultBreakpoint = includeDefaultBreakpoint };
-    }
+        protected readonly TestScript Script;
 
-    [Obsolete("Replace with RunTest(JavaScriptFact fact)")]
-    protected String RunTest(String context, String action)
-    {
-      try
-      {
-        // The action will always be the function name to call; must invoke function with (); to run test.
-        return Script.RunTest(String.Format("return {0}();", action));
-      }
-      catch (ScriptException ex)
-      {
-        // StackTrace intentionally thrown away as it contains no meaninful information; exception details are in message.
-        throw new ScriptException(context + '.' + action + Environment.NewLine + ex.Message);
-      }
-    }
+        protected JavaScriptTestBase()
+            : this(false)
+        { }
 
-    protected String RunTest(JavaScriptFact fact)
-    {
-      try
-      {
-        // The action will always be the function name to call; must invoke function with (); to run test.
-        return Script.RunTest(fact);
-      }
-      catch (ScriptException ex)
-      {
-        // StackTrace intentionally thrown away as it contains no meaninful information; exception details are in message.
-        throw new ScriptException(fact.TestName + Environment.NewLine + ex.Message);
-      }
+        protected JavaScriptTestBase(Boolean includeDefaultBreakpoint)
+        {
+            Script = new TestScript { IncludeDefaultBreakpoint = includeDefaultBreakpoint };
+        }
+
+        [Obsolete("Replace with RunTest(JavaScriptFact fact)")]
+        protected String RunTest(String context, String action)
+        {
+            try
+            {
+                // The action will always be the function name to call; must invoke function with (); to run test.
+                return Script.RunTest(String.Format("return {0}();", action));
+            }
+            catch (ScriptException ex)
+            {
+                // StackTrace intentionally thrown away as it contains no meaninful information; exception details are in message.
+                throw new ScriptException(context + '.' + action + Environment.NewLine + ex.Message);
+            }
+        }
+
+        protected String RunTest(JavaScriptFact fact)
+        {
+            try
+            {
+                // The action will always be the function name to call; must invoke function with (); to run test.
+                return Script.RunTest(fact);
+            }
+            catch (ScriptException ex)
+            {
+                // StackTrace intentionally thrown away as it contains no meaninful information; exception details are in message.
+                throw new ScriptException(fact.TestName + Environment.NewLine + ex.Message);
+            }
+        }
     }
-  }
 }

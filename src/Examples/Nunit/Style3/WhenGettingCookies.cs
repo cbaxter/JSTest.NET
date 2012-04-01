@@ -18,81 +18,81 @@ using NUnit.Framework;
 
 namespace JSTest.Examples.Nunit.Style3
 {
-  [TestFixture]
-  public class WhenGettingCookies : JavaScriptTestBase
-  {
-    [SetUp]
-    public void Setup()
+    [TestFixture]
+    public class WhenGettingCookies : JavaScriptTestBase
     {
-      Script = new TestScript { IncludeDefaultBreakpoint = false };
+        [SetUp]
+        public void Setup()
+        {
+            Script = new TestScript { IncludeDefaultBreakpoint = false };
 
-      // Append required JavaScript libraries.
-      Script.AppendBlock(new JsAssertLibrary());
+            // Append required JavaScript libraries.
+            Script.AppendBlock(new JsAssertLibrary());
 
-      // Append required JavaScript Files.
-      Script.AppendFile(@"..\..\dateExtensions.js");
-      Script.AppendFile(@"..\..\cookieContainer.js");
-      Script.AppendFile(@"..\..\whenGettingCookies.js");
+            // Append required JavaScript Files.
+            Script.AppendFile(@"..\..\dateExtensions.js");
+            Script.AppendFile(@"..\..\cookieContainer.js");
+            Script.AppendFile(@"..\..\whenGettingCookies.js");
 
-      // Setup JavaScript Context
-      Script.AppendBlock(@"
-                           var document = {};
-                           var cookieContainer = new CookieContainer(document);
-                         ");
+            // Setup JavaScript Context
+            Script.AppendBlock(@"
+                                 var document = {};
+                                 var cookieContainer = new CookieContainer(document);
+                               ");
+        }
+
+        [Test]
+        public void ReturnEmptyStringIfCookiesNotSet()
+        {
+            var result = RunTest(@"
+                                   document.cookie = '';
+
+                                   return cookieContainer.getCookie('MyCookie');
+                                 ");
+
+            Assert.AreEqual(String.Empty, result);
+        }
+
+        [Test]
+        public void ReturnCookieValueIfSingleCookieDefined()
+        {
+            var result = RunTest(@"
+                                   document.cookie = 'MyCookie=' + escape('Chocolate Chip') + '; expires=' + new Date().toUTCString();
+
+                                   return cookieContainer.getCookie('MyCookie');
+                                 ");
+
+            Assert.AreEqual("Chocolate Chip", result);
+        }
+
+        [Test]
+        public void ReturnLastCookieValueIfMultipleCookiesDefined()
+        {
+            var result = RunTest(@"
+                                   var cookie1 = 'MyCookie1=' + escape('Chocolate Chip') + '; expires=' + new Date().toUTCString();
+                                   var cookie2 = 'MyCookie2=' + escape('Peanut Butter') + '; expires=' + new Date().toUTCString();
+
+                                   document.cookie = cookie1 + '; ' + cookie2;
+
+                                   return cookieContainer.getCookie('MyCookie2');
+                                 ");
+
+            Assert.AreEqual("Peanut Butter", result);
+        }
+
+        [Test]
+        public void ReturnCookieValueIfLikeNamedCookiesDefined()
+        {
+            var result = RunTest(@"
+                                   var cookie1 = 'MyCookie=' + escape('Chocolate Chip') + '; expires=' + new Date().toUTCString();
+                                   var cookie2 = 'AlsoMyCookie=' + escape('Peanut Butter') + '; expires=' + new Date().toUTCString();
+
+                                   document.cookie = cookie1 + '; ' + cookie2;
+
+                                   return cookieContainer.getCookie('MyCookie');
+                                 ");
+
+            Assert.AreEqual("Chocolate Chip", result);
+        }
     }
-
-    [Test]
-    public void ReturnEmptyStringIfCookiesNotSet()
-    {
-      var result = RunTest(@"
-                             document.cookie = '';
-
-                             return cookieContainer.getCookie('MyCookie');
-                           ");
-      
-      Assert.AreEqual(String.Empty, result);
-    }
-
-    [Test]
-    public void ReturnCookieValueIfSingleCookieDefined()
-    {
-      var result = RunTest(@"
-                             document.cookie = 'MyCookie=' + escape('Chocolate Chip') + '; expires=' + new Date().toUTCString();
-
-                             return cookieContainer.getCookie('MyCookie');
-                           ");
-
-      Assert.AreEqual("Chocolate Chip", result);
-    }
-
-    [Test]
-    public void ReturnLastCookieValueIfMultipleCookiesDefined()
-    {
-      var result = RunTest(@"
-                             var cookie1 = 'MyCookie1=' + escape('Chocolate Chip') + '; expires=' + new Date().toUTCString();
-                             var cookie2 = 'MyCookie2=' + escape('Peanut Butter') + '; expires=' + new Date().toUTCString();
-
-                             document.cookie = cookie1 + '; ' + cookie2;
-
-                             return cookieContainer.getCookie('MyCookie2');
-                           ");
-
-      Assert.AreEqual("Peanut Butter", result);
-    }
-
-    [Test]
-    public void ReturnCookieValueIfLikeNamedCookiesDefined()
-    {
-      var result = RunTest(@"
-                             var cookie1 = 'MyCookie=' + escape('Chocolate Chip') + '; expires=' + new Date().toUTCString();
-                             var cookie2 = 'AlsoMyCookie=' + escape('Peanut Butter') + '; expires=' + new Date().toUTCString();
-
-                             document.cookie = cookie1 + '; ' + cookie2;
-
-                             return cookieContainer.getCookie('MyCookie');
-                           ");
-
-      Assert.AreEqual("Chocolate Chip", result);
-    }
-  }
 }

@@ -17,51 +17,51 @@ using NUnit.Framework;
 
 namespace JSTest.Examples.Nunit.Style2
 {
-  [TestFixture]
-  public class WhenSettingCookies
-  {
-    protected TestScript Script { get; set; }
-
-    [SetUp]
-    public void Setup()
+    [TestFixture]
+    public class WhenSettingCookies
     {
-      Script = new TestScript { IncludeDefaultBreakpoint = false };
+        protected TestScript Script { get; set; }
 
-      // Append required JavaScript libraries.
-      Script.AppendBlock(new JsAssertLibrary());
+        [SetUp]
+        public void Setup()
+        {
+            Script = new TestScript { IncludeDefaultBreakpoint = false };
 
-      // Append required JavaScript Files.
-      Script.AppendFile(@"..\..\dateExtensions.js");
-      Script.AppendFile(@"..\..\cookieContainer.js");
-      Script.AppendFile(@"..\..\whenSettingCookies.js");
+            // Append required JavaScript libraries.
+            Script.AppendBlock(new JsAssertLibrary());
 
-      // Setup JavaScript Context
-      Script.AppendBlock(@"
-                           var document = {};
-                           var cookieContainer = new CookieContainer(document);
-                         ");
+            // Append required JavaScript Files.
+            Script.AppendFile(@"..\..\dateExtensions.js");
+            Script.AppendFile(@"..\..\cookieContainer.js");
+            Script.AppendFile(@"..\..\whenSettingCookies.js");
+
+            // Setup JavaScript Context
+            Script.AppendBlock(@"
+                                 var document = {};
+                                 var cookieContainer = new CookieContainer(document);
+                               ");
+        }
+
+        [Test]
+        public void CookieDocumentSet()
+        {
+            Script.RunTest(@"
+                             cookieContainer.setCookie('MyCookie', 'Chocolate Chip');
+
+                             assert.equal('MyCookie=' + escape('Chocolate Chip') + ';path=/', document.cookie);
+                           ");
+        }
+
+        [Test]
+        public void CookieExpirySetIfDaysSpecified()
+        {
+            Script.RunTest(@"
+                             var now = new Date();
+
+                             cookieContainer.setCookie('MyCookie', 'Chocolate Chip', 1, now);
+
+                             assert.equal('MyCookie=' + escape('Chocolate Chip') + ';expires=' + now.addDays(1).toUTCString() + ';path=/', document.cookie);
+                           ");
+        }
     }
-
-    [Test]
-    public void CookieDocumentSet()
-    {
-      Script.RunTest(@"
-                       cookieContainer.setCookie('MyCookie', 'Chocolate Chip');
-
-                       assert.equal('MyCookie=' + escape('Chocolate Chip') + ';path=/', document.cookie);
-                     ");
-    }
-
-    [Test]
-    public void CookieExpirySetIfDaysSpecified()
-    {
-      Script.RunTest(@"
-                       var now = new Date();
-
-                       cookieContainer.setCookie('MyCookie', 'Chocolate Chip', 1, now);
-
-                       assert.equal('MyCookie=' + escape('Chocolate Chip') + ';expires=' + now.addDays(1).toUTCString() + ';path=/', document.cookie);
-                     ");
-    }
-  }
 }

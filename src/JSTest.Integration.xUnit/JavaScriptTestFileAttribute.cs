@@ -21,31 +21,31 @@ using Xunit.Extensions;
 
 namespace JSTest.Integration.Xunit
 {
-  [Obsolete("Replace with JavaScriptFactFileAttribute")]
-  [AttributeUsage(AttributeTargets.Method, Inherited = true, AllowMultiple = true)]
-  public class JavaScriptTestFileAttribute : DataAttribute
-  {
-    private readonly String _fileName;
-    private readonly String _testFunctionPattern;
-
-    public JavaScriptTestFileAttribute(String fileName)
-      : this(fileName, null)
-    { }
-
-    public JavaScriptTestFileAttribute(String fileName, String testFunctionPattern)
+    [Obsolete("Replace with JavaScriptFactFileAttribute")]
+    [AttributeUsage(AttributeTargets.Method, Inherited = true, AllowMultiple = true)]
+    public class JavaScriptTestFileAttribute : DataAttribute
     {
-      _fileName = fileName;
-      _testFunctionPattern = testFunctionPattern;
+        private readonly String _fileName;
+        private readonly String _testFunctionPattern;
+
+        public JavaScriptTestFileAttribute(String fileName)
+            : this(fileName, null)
+        { }
+
+        public JavaScriptTestFileAttribute(String fileName, String testFunctionPattern)
+        {
+            _fileName = fileName;
+            _testFunctionPattern = testFunctionPattern;
+        }
+
+        public override IEnumerable<Object[]> GetData(MethodInfo methodUnderTest, Type[] parameterTypes)
+        {
+            var result = new List<Object[]>();
+
+            foreach (var testCase in TestCase.LoadFrom(_fileName, _testFunctionPattern))
+                result.Add(new Object[] { Path.GetFileNameWithoutExtension(testCase.TestFile), testCase.TestFunction, testCase.TestFile });
+
+            return result;
+        }
     }
-
-    public override IEnumerable<Object[]> GetData(MethodInfo methodUnderTest, Type[] parameterTypes)
-    {
-      var result = new List<Object[]>();
-
-      foreach (var testCase in TestCase.LoadFrom(_fileName, _testFunctionPattern))
-        result.Add(new Object[] { Path.GetFileNameWithoutExtension(testCase.TestFile), testCase.TestFunction, testCase.TestFile });
-
-      return result;
-    }
-  }
 }

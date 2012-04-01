@@ -20,30 +20,30 @@ using Xunit.Extensions;
 
 namespace JSTest.Integration.Xunit
 {
-  [AttributeUsage(AttributeTargets.Method, Inherited = true, AllowMultiple = true)]
-  public class JavaScriptFactFileAttribute : DataAttribute
-  {
-    private readonly String _fileName;
-    private readonly String _testFunctionPattern;
-
-    public JavaScriptFactFileAttribute(String fileName)
-      : this(fileName, null)
-    { }
-
-    public JavaScriptFactFileAttribute(String fileName, String testFunctionPattern)
+    [AttributeUsage(AttributeTargets.Method, Inherited = true, AllowMultiple = true)]
+    public class JavaScriptFactFileAttribute : DataAttribute
     {
-      _fileName = fileName;
-      _testFunctionPattern = testFunctionPattern;
+        private readonly String _fileName;
+        private readonly String _testFunctionPattern;
+
+        public JavaScriptFactFileAttribute(String fileName)
+            : this(fileName, null)
+        { }
+
+        public JavaScriptFactFileAttribute(String fileName, String testFunctionPattern)
+        {
+            _fileName = fileName;
+            _testFunctionPattern = testFunctionPattern;
+        }
+
+        public override IEnumerable<Object[]> GetData(MethodInfo methodUnderTest, Type[] parameterTypes)
+        {
+            var result = new List<Object[]>();
+
+            foreach (var testCase in TestCase.LoadFrom(_fileName, _testFunctionPattern))
+                result.Add(new Object[] { new JavaScriptFact(testCase) });
+
+            return result;
+        }
     }
-
-    public override IEnumerable<Object[]> GetData(MethodInfo methodUnderTest, Type[] parameterTypes)
-    {
-      var result = new List<Object[]>();
-
-      foreach (var testCase in TestCase.LoadFrom(_fileName, _testFunctionPattern))
-        result.Add(new Object[] { new JavaScriptFact(testCase) });
-
-      return result;
-    }
-  }
 }

@@ -16,20 +16,20 @@
 
 namespace JSTest.ScriptElements
 {
-  public class ScriptBlock : ScriptElement
-  {
-    private readonly String _scriptBlock;
-
-    public ScriptBlock(String scriptBlock)
+    public class ScriptBlock : ScriptElement
     {
-      Verify.NotWhiteSpace(scriptBlock, "scriptBlock");
+        private readonly String _scriptBlock;
 
-      _scriptBlock = scriptBlock;
-    }
+        public ScriptBlock(String scriptBlock)
+        {
+            Verify.NotWhiteSpace(scriptBlock, "scriptBlock");
 
-    public override String ToScriptFragment()
-    {
-      return String.Format("<script language='JavaScript'>{0}{1}{0}</script>", Environment.NewLine, _scriptBlock);
+            _scriptBlock = scriptBlock;
+        }
+
+        public override String ToScriptFragment()
+        {
+            return String.Format("<script language='JavaScript'>{0}{1}{0}</script>", Environment.NewLine, _scriptBlock);
+        }
     }
-  }
 }

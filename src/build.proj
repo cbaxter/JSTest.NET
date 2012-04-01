@@ -1,100 +1,100 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Test">
 
-  <Import Project="..\lib\MSBuild\MSBuild.Community.Tasks\MSBuild.Community.Tasks.Targets"/>
-  <UsingTask TaskName="Xunit.Runner.MSBuild.xunit" AssemblyFile="..\lib\MSBuild\xUnit\xunit.runner.msbuild.dll" />
+    <Import Project="..\lib\MSBuild\MSBuild.Community.Tasks\MSBuild.Community.Tasks.Targets"/>
+    <UsingTask TaskName="Xunit.Runner.MSBuild.xunit" AssemblyFile="..\lib\MSBuild\xUnit\xunit.runner.msbuild.dll" />
 
-  <PropertyGroup>
-
-    <BuildOutput>..\build</BuildOutput>
-
-    <Platform Condition="'$(Platform)' == ''">Any CPU</Platform>
-    <Configuration Condition="'$(Configuration)' == ''">Release</Configuration>
-    <BuildVersion Condition="'$(BuildVersion)' == ''">0.0.0.0</BuildVersion>
-    <MSpecOptions Condition="'$(MSpecOptions)' == ''"></MSpecOptions>
-
-    <NuGetBootstrapper>..\.nuget\nuget-bootstrap.exe</NuGetBootstrapper>
-    <NuGetPackages>..\packages</NuGetPackages>
-    <NuGet>..\.nuget\nuget.exe</NuGet>
-
-  </PropertyGroup>
-
-  <Target Name="InstallNuGet" Condition="!Exists('$(NuGet)')">
-    <Exec Command="$(NuGetBootstrapper)"></Exec>
-    <Move SourceFiles="$(NuGetBootstrapper)" DestinationFiles="$(NuGet)" />
-    <Move SourceFiles="$(NuGetBootstrapper).old" DestinationFiles="$(NuGetBootstrapper)" />
-  </Target>
-
-  <Target Name="InstallNugetPackages" DependsOnTargets="InstallNuGet">
-    <ItemGroup>
-      <PackageConfigFiles Include="**\packages.config" />
-    </ItemGroup>
-
-    <Exec Command="$(NuGet) install %(PackageConfigFiles.Identity) -o $(NuGetPackages)" />
-  </Target>
-
-  <Target Name="Clean">
-    <ItemGroup>
-      <CleanFiles Include="**\bin\$(Configuration)\**" />
-      <CleanFiles Include="**\bin\*.*" />
-      <CleanFiles Include="**\obj\$(Configuration)\**" />
-      <CleanFiles Include="**\obj\*.*" />
-    </ItemGroup>
-
-    <RemoveDir Directories="$(BuildOutput)" ContinueOnError="true"/>
-    <Delete Files="@(CleanFiles)" />
-  </Target>
-
-  <Target Name="Initialize" DependsOnTargets="Clean;InstallNugetPackages">
-    <MakeDir Directories="$(BuildOutput)" />
-
-    <AssemblyInfo CodeLanguage="CS" OutputFile="Shared\VersionInfo.cs" AssemblyVersion="$(BuildVersion)" AssemblyFileVersion="$(BuildVersion)" AssemblyConfiguration="$(Configuration)" />
-  </Target>
-
-  <Target Name="Build" DependsOnTargets="Initialize">
-    <MSBuild Projects="JSTest.sln" Targets="Build" Properties="Configuration=$(Configuration);Platform=$(Platform)" />
-  </Target>
-
-  <Target Name="Test" DependsOnTargets="Build">
-    <ItemGroup>
-      <TestProjects Include="*.Test\**\$(Configuration)\*.Test.dll" Exclude="**\obj\**"/>
-    </ItemGroup>
-
-    <xunit Assembly="%(TestProjects.Identity)" />
-  </Target>
-
-  <Target Name="PackageCore">
     <PropertyGroup>
-      <JSTestFolder>$(BuildOutput)\JSTest</JSTestFolder>
-      <JSTestAssembly>JSTest.dll</JSTestAssembly>
-    </PropertyGroup>
-    
-    <Copy SourceFiles="..\.nuget\$(JSTestAssembly).nuspec" DestinationFolder="$(JSTestFolder)"></Copy>
-    <Copy SourceFiles="JSTest\bin\$(Configuration)\$(JSTestAssembly)" DestinationFolder="$(JSTestFolder)\lib"></Copy>
 
-    <XmlUpdate XmlFileName="$(JSTestFolder)\$(JSTestAssembly).nuspec" Xpath="//package/metadata/version/text()" Value="$(BuildVersion)" />
+        <BuildOutput>..\build</BuildOutput>
 
-    <Exec Command="$(NuGet) pack $(JSTestFolder)\$(JSTestAssembly).nuspec -OutputDirectory $(JSTestFolder)" />
-  </Target>
+        <Platform Condition="'$(Platform)' == ''">Any CPU</Platform>
+        <Configuration Condition="'$(Configuration)' == ''">Release</Configuration>
+        <BuildVersion Condition="'$(BuildVersion)' == ''">0.0.0.0</BuildVersion>
+        <MSpecOptions Condition="'$(MSpecOptions)' == ''"></MSpecOptions>
 
-  <Target Name="PackageXunitExtension">
-    <PropertyGroup>
-      <XunitExtensionFolder>$(BuildOutput)\JSTest.Integration.xUnit</XunitExtensionFolder>
-      <XunitExtensionAssembly>JSTest.Integration.xUnit.dll</XunitExtensionAssembly>
+        <NuGetBootstrapper>..\.nuget\nuget-bootstrap.exe</NuGetBootstrapper>
+        <NuGetPackages>..\packages</NuGetPackages>
+        <NuGet>..\.nuget\nuget.exe</NuGet>
+
     </PropertyGroup>
 
-    <Copy SourceFiles="..\.nuget\$(XunitExtensionAssembly).nuspec" DestinationFolder="$(XunitExtensionFolder)"></Copy>
-    <Copy SourceFiles="JSTest.Integration.xUnit\bin\$(Configuration)\$(XunitExtensionAssembly)" DestinationFolder="$(XunitExtensionFolder)\lib"></Copy>
+    <Target Name="InstallNuGet" Condition="!Exists('$(NuGet)')">
+        <Exec Command="$(NuGetBootstrapper)"></Exec>
+        <Move SourceFiles="$(NuGetBootstrapper)" DestinationFiles="$(NuGet)" />
+        <Move SourceFiles="$(NuGetBootstrapper).old" DestinationFiles="$(NuGetBootstrapper)" />
+    </Target>
 
-    <XmlUpdate XmlFileName="$(XunitExtensionFolder)\$(XunitExtensionAssembly).nuspec" Xpath="//package/metadata/version/text()" Value="$(BuildVersion)" />
+    <Target Name="InstallNugetPackages" DependsOnTargets="InstallNuGet">
+        <ItemGroup>
+            <PackageConfigFiles Include="**\packages.config" />
+        </ItemGroup>
 
-    <Exec Command="$(NuGet) pack $(XunitExtensionFolder)\$(XunitExtensionAssembly).nuspec -OutputDirectory $(XunitExtensionFolder)" />
-  </Target>
+        <Exec Command="$(NuGet) install %(PackageConfigFiles.Identity) -o $(NuGetPackages)" />
+    </Target>
 
-  <Target Name="Package" DependsOnTargets="Test">
-    <Exec Command="$(NuGet) update -self" />
+    <Target Name="Clean">
+        <ItemGroup>
+            <CleanFiles Include="**\bin\$(Configuration)\**" />
+            <CleanFiles Include="**\bin\*.*" />
+            <CleanFiles Include="**\obj\$(Configuration)\**" />
+            <CleanFiles Include="**\obj\*.*" />
+        </ItemGroup>
 
-    <CallTarget Targets="PackageCore" />
-    <CallTarget Targets="PackageXunitExtension" />
-  </Target>
+        <RemoveDir Directories="$(BuildOutput)" ContinueOnError="true"/>
+        <Delete Files="@(CleanFiles)" />
+    </Target>
+
+    <Target Name="Initialize" DependsOnTargets="Clean;InstallNugetPackages">
+        <MakeDir Directories="$(BuildOutput)" />
+
+        <AssemblyInfo CodeLanguage="CS" OutputFile="Shared\VersionInfo.cs" AssemblyVersion="$(BuildVersion)" AssemblyFileVersion="$(BuildVersion)" AssemblyConfiguration="$(Configuration)" />
+    </Target>
+
+    <Target Name="Build" DependsOnTargets="Initialize">
+        <MSBuild Projects="JSTest.sln" Targets="Build" Properties="Configuration=$(Configuration);Platform=$(Platform)" />
+    </Target>
+
+    <Target Name="Test" DependsOnTargets="Build">
+        <ItemGroup>
+            <TestProjects Include="*.Test\**\$(Configuration)\*.Test.dll" Exclude="**\obj\**"/>
+        </ItemGroup>
+
+        <xunit Assembly="%(TestProjects.Identity)" />
+    </Target>
+
+    <Target Name="PackageCore">
+        <PropertyGroup>
+            <JSTestFolder>$(BuildOutput)\JSTest</JSTestFolder>
+            <JSTestAssembly>JSTest.dll</JSTestAssembly>
+        </PropertyGroup>
+
+        <Copy SourceFiles="..\.nuget\$(JSTestAssembly).nuspec" DestinationFolder="$(JSTestFolder)"></Copy>
+        <Copy SourceFiles="JSTest\bin\$(Configuration)\$(JSTestAssembly)" DestinationFolder="$(JSTestFolder)\lib"></Copy>
+
+        <XmlUpdate XmlFileName="$(JSTestFolder)\$(JSTestAssembly).nuspec" Xpath="//package/metadata/version/text()" Value="$(BuildVersion)" />
+
+        <Exec Command="$(NuGet) pack $(JSTestFolder)\$(JSTestAssembly).nuspec -OutputDirectory $(JSTestFolder)" />
+    </Target>
+
+    <Target Name="PackageXunitExtension">
+        <PropertyGroup>
+            <XunitExtensionFolder>$(BuildOutput)\JSTest.Integration.xUnit</XunitExtensionFolder>
+            <XunitExtensionAssembly>JSTest.Integration.xUnit.dll</XunitExtensionAssembly>
+        </PropertyGroup>
+
+        <Copy SourceFiles="..\.nuget\$(XunitExtensionAssembly).nuspec" DestinationFolder="$(XunitExtensionFolder)"></Copy>
+        <Copy SourceFiles="JSTest.Integration.xUnit\bin\$(Configuration)\$(XunitExtensionAssembly)" DestinationFolder="$(XunitExtensionFolder)\lib"></Copy>
+
+        <XmlUpdate XmlFileName="$(XunitExtensionFolder)\$(XunitExtensionAssembly).nuspec" Xpath="//package/metadata/version/text()" Value="$(BuildVersion)" />
+
+        <Exec Command="$(NuGet) pack $(XunitExtensionFolder)\$(XunitExtensionAssembly).nuspec -OutputDirectory $(XunitExtensionFolder)" />
+    </Target>
+
+    <Target Name="Package" DependsOnTargets="Test">
+        <Exec Command="$(NuGet) update -self" />
+
+        <CallTarget Targets="PackageCore" />
+        <CallTarget Targets="PackageXunitExtension" />
+    </Target>
 
 </Project>

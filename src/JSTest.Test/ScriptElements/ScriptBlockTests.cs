@@ -19,36 +19,36 @@ using Xunit.Extensions;
 
 namespace JSTest.Test.ScriptElements
 {
-  public class WhenCreatingScriptBlock
-  {
-    [Theory, InlineData(null), InlineData(""), InlineData(" "), InlineData("\r\n")]
-    public void ThrowArgumentExceptionIfWhitespaceOnly(String scriptBlock)
+    public class WhenCreatingScriptBlock
     {
-      Assert.Throws<ArgumentException>(() => new ScriptBlock(scriptBlock));
-    }
-  }
-
-  public class WhenConvertingScriptBlockToString
-  {
-    [Fact]
-    public void WrapScriptBlockWithScriptTag()
-    {
-      var scriptBlock = new ScriptBlock("function myFunction() { }");
-
-      Assert.Equal(
-        String.Format(ScriptResources.ScriptBlockFormat, "function myFunction() { }"),
-        scriptBlock.ToScriptFragment()
-      );
+        [Theory, InlineData(null), InlineData(""), InlineData(" "), InlineData("\r\n")]
+        public void ThrowArgumentExceptionIfWhitespaceOnly(String scriptBlock)
+        {
+            Assert.Throws<ArgumentException>(() => new ScriptBlock(scriptBlock));
+        }
     }
 
-    [Fact]
-    public void CanImplicitlyConvertToString()
+    public class WhenConvertingScriptBlockToString
     {
-      var scriptBlock = new ScriptBlock("function myFunction() { }");
+        [Fact]
+        public void WrapScriptBlockWithScriptTag()
+        {
+            var scriptBlock = new ScriptBlock("function myFunction() { }");
 
-      String script = scriptBlock;
-      
-      Assert.Equal(scriptBlock.ToScriptFragment(), script);
+            Assert.Equal(
+              String.Format(ScriptResources.ScriptBlockFormat, "function myFunction() { }"),
+              scriptBlock.ToScriptFragment()
+            );
+        }
+
+        [Fact]
+        public void CanImplicitlyConvertToString()
+        {
+            var scriptBlock = new ScriptBlock("function myFunction() { }");
+
+            String script = scriptBlock;
+
+            Assert.Equal(scriptBlock.ToScriptFragment(), script);
+        }
     }
-  }
 }

@@ -18,34 +18,34 @@ using Xunit;
 namespace JSTest.Integration.Xunit.Test
 {
 
-  public class JavaScriptTestBaseTest : JavaScriptTestBase
-  {
-    public JavaScriptTestBaseTest()
-      : base(true)
-    { }
+    public class JavaScriptTestBaseTest : JavaScriptTestBase
+    {
+        public JavaScriptTestBaseTest()
+            : base(true)
+        { }
 
 #pragma warning disable 612,618
-    [JavaScriptTestSuite]
-    [JavaScriptTestFile(@"..\..\TestFile3.js")]
-    public void TestLegacy(String context, String action, String fileName)
-    {
-      // Append JavaScript 'Fact' File.
-      Script.AppendFile(fileName);
+        [JavaScriptTestSuite]
+        [JavaScriptTestFile(@"..\..\TestFile3.js")]
+        public void TestLegacy(String context, String action, String fileName)
+        {
+            // Append JavaScript 'Fact' File.
+            Script.AppendFile(fileName);
 
-      // Verify 'Fact'.
-      Assert.Equal("true", RunTest(context, action));
-    }
+            // Verify 'Fact'.
+            Assert.Equal("true", RunTest(context, action));
+        }
 #pragma warning restore 612,618
 
-    [JavaScriptTestSuite]
-    [JavaScriptFactFile(@"..\..\TestFile3.js")]
-    public void Test(JavaScriptFact fact)
-    {
-      // Append JavaScript 'Fact' File.
-      Script.AppendFile(fact.TestFile);
+        [JavaScriptTestSuite]
+        [JavaScriptFactFile(@"..\..\TestFile3.js")]
+        public void Test(JavaScriptFact fact)
+        {
+            // Append JavaScript 'Fact' File.
+            Script.AppendFile(fact.TestFile);
 
-      // Verify 'Fact'.
-      Assert.Equal("true", RunTest(fact));
+            // Verify 'Fact'.
+            Assert.Equal("true", RunTest(fact));
+        }
     }
-  }
 }

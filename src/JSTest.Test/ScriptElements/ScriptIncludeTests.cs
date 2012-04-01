@@ -20,46 +20,46 @@ using Xunit.Extensions;
 
 namespace JSTest.Test.ScriptElements
 {
-  public class WhenCreatingScriptInclude
-  {
-    [Theory, InlineData(null), InlineData(""), InlineData(" "), InlineData("\r\n")]
-    public void ThrowArgumentExceptionIfWhitespaceOnly(String scriptBlock)
+    public class WhenCreatingScriptInclude
     {
-      Assert.Throws<ArgumentException>(() => new ScriptInclude(scriptBlock));
+        [Theory, InlineData(null), InlineData(""), InlineData(" "), InlineData("\r\n")]
+        public void ThrowArgumentExceptionIfWhitespaceOnly(String scriptBlock)
+        {
+            Assert.Throws<ArgumentException>(() => new ScriptInclude(scriptBlock));
+        }
+
+        [Fact]
+        public void ThrowArgumentExceptionIfFileDoesNotExist()
+        {
+            Assert.Throws<FileNotFoundException>(() => new ScriptInclude(@"Q:\FakeFolder\FakeFile.ffe"));
+        }
     }
 
-    [Fact]
-    public void ThrowArgumentExceptionIfFileDoesNotExist()
+    public class WhenConvertingScriptIncludeToString
     {
-      Assert.Throws<FileNotFoundException>(() => new ScriptInclude(@"Q:\FakeFolder\FakeFile.ffe"));
-    }
-  }
-  
-  public class WhenConvertingScriptIncludeToString
-  {
-    [Fact]
-    public void WrapScriptBlockWithScriptTag()
-    {
-      using (var tempFile = new TempFile())
-      {
-        Assert.Equal(
-          String.Format(ScriptResources.ScriptIncludeFormat, tempFile.FileName),
-          new ScriptInclude(tempFile.FileName).ToScriptFragment()
-        );
-      }
-    }
+        [Fact]
+        public void WrapScriptBlockWithScriptTag()
+        {
+            using (var tempFile = new TempFile())
+            {
+                Assert.Equal(
+                  String.Format(ScriptResources.ScriptIncludeFormat, tempFile.FileName),
+                  new ScriptInclude(tempFile.FileName).ToScriptFragment()
+                );
+            }
+        }
 
-    [Fact]
-    public void CanImplicitlyConvertToString()
-    {
-      using (var tempFile = new TempFile())
-      {
-        var scriptInclude = new ScriptInclude(tempFile.FileName);
+        [Fact]
+        public void CanImplicitlyConvertToString()
+        {
+            using (var tempFile = new TempFile())
+            {
+                var scriptInclude = new ScriptInclude(tempFile.FileName);
 
-        String script = scriptInclude;
+                String script = scriptInclude;
 
-        Assert.Equal(scriptInclude.ToScriptFragment(), script);
-      }
+                Assert.Equal(scriptInclude.ToScriptFragment(), script);
+            }
+        }
     }
-  }
 }

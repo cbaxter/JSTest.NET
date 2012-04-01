@@ -16,19 +16,19 @@
 
 namespace JSTest
 {
-  internal class Verify
-  {
-    public static void NotNull<T>(T value, String paramName)
-      where T : class
+    internal class Verify
     {
-      if (value == null)
-        throw new ArgumentNullException(paramName, "Value cannot be null.");
-    }
+        public static void NotNull<T>(T value, String paramName)
+          where T : class
+        {
+            if (value == null)
+                throw new ArgumentNullException(paramName, "Value cannot be null.");
+        }
 
-    public static void NotWhiteSpace(String value, String paramName)
-    {
-      if (String.IsNullOrEmpty((value ?? String.Empty).Trim()))
-        throw new ArgumentException("Value cannot be a null, empty or whitespace only.", paramName);
+        public static void NotWhiteSpace(String value, String paramName)
+        {
+            if (String.IsNullOrEmpty((value ?? String.Empty).Trim()))
+                throw new ArgumentException("Value cannot be a null, empty or whitespace only.", paramName);
+        }
     }
-  }
 }

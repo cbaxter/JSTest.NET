@@ -19,50 +19,50 @@ using System.Text.RegularExpressions;
 
 namespace JSTest.ScriptElements
 {
-  public class TestCase : ScriptElement
-  {
-    private readonly String _fileName;
-    private readonly String _functionName;
-    private readonly String _testName;
-
-    public String TestName { get { return _testName; } }
-    public String TestFile { get { return _fileName; } }
-    public String TestFunction { get { return _functionName; } }
-
-    public TestCase(String fileName, String functionName)
+    public class TestCase : ScriptElement
     {
-      Verify.NotWhiteSpace(fileName, "fileName");
-      Verify.NotWhiteSpace(functionName, "functionName");
+        private readonly String _fileName;
+        private readonly String _functionName;
+        private readonly String _testName;
 
-      _fileName = fileName;
-      _functionName = functionName;
-      _testName = String.Concat(Path.GetFileNameWithoutExtension(fileName), '.', _functionName);
+        public String TestName { get { return _testName; } }
+        public String TestFile { get { return _fileName; } }
+        public String TestFunction { get { return _functionName; } }
+
+        public TestCase(String fileName, String functionName)
+        {
+            Verify.NotWhiteSpace(fileName, "fileName");
+            Verify.NotWhiteSpace(functionName, "functionName");
+
+            _fileName = fileName;
+            _functionName = functionName;
+            _testName = String.Concat(Path.GetFileNameWithoutExtension(fileName), '.', _functionName);
+        }
+
+        public override string ToScriptFragment()
+        {
+            return String.Format("return {0}();", _functionName);
+        }
+
+        public override string ToString()
+        {
+            return TestName;
+        }
+
+        public static TestCase[] LoadFrom(String fileName)
+        {
+            return LoadFrom(fileName, null);
+        }
+
+        public static TestCase[] LoadFrom(String fileName, String testFunctionPattern)
+        {
+            var result = new List<TestCase>();
+            var regexPattern = @"^\s*function\s+(?<FunctionName>" + (testFunctionPattern ?? @"[$A-Za-z_][$A-Za-z0-9_]*") + @")\s*\(\s*\)\s*\{?\s*$";
+
+            foreach (Match match in Regex.Matches(File.ReadAllText(fileName), regexPattern, RegexOptions.Multiline))
+                result.Add(new TestCase(fileName, match.Groups["FunctionName"].Value));
+
+            return result.ToArray();
+        }
     }
-
-    public override string ToScriptFragment()
-    {
-      return String.Format("return {0}();", _functionName);
-    }
-
-    public override string ToString()
-    {
-      return TestName;
-    }
-
-    public static TestCase[] LoadFrom(String fileName)
-    {
-      return LoadFrom(fileName, null);
-    }
-
-    public static TestCase[] LoadFrom(String fileName, String testFunctionPattern)
-    {
-      var result = new List<TestCase>();
-      var regexPattern = @"^\s*function\s+(?<FunctionName>" + (testFunctionPattern ?? @"[$A-Za-z_][$A-Za-z0-9_]*") + @")\s*\(\s*\)\s*\{?\s*$";
-
-      foreach (Match match in Regex.Matches(File.ReadAllText(fileName), regexPattern, RegexOptions.Multiline))
-        result.Add(new TestCase(fileName, match.Groups["FunctionName"].Value));
-
-      return result.ToArray();
-    }
-  }
 }

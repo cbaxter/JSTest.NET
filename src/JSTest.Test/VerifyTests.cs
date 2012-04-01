@@ -18,33 +18,33 @@ using Xunit.Extensions;
 
 namespace JSTest.Test
 {
-  public class WhenVerifyingNotNull
-  {
-    [Fact]
-    public void IgnoreNonNullValues()
+    public class WhenVerifyingNotNull
     {
-      Assert.DoesNotThrow(() => Verify.NotNull(new Object(), "obj"));
+        [Fact]
+        public void IgnoreNonNullValues()
+        {
+            Assert.DoesNotThrow(() => Verify.NotNull(new Object(), "obj"));
+        }
+
+        [Fact]
+        public void ThrowArgumentNullExceptionOnNullValues()
+        {
+            Assert.Throws<ArgumentNullException>(() => Verify.NotNull((Object)null, "obj"));
+        }
     }
 
-    [Fact]
-    public void ThrowArgumentNullExceptionOnNullValues()
+    public class WhenVerifyingNotWhitespace
     {
-      Assert.Throws<ArgumentNullException>(() => Verify.NotNull((Object)null, "obj"));
-    }
-  }
+        [Fact]
+        public void NotWhiteSpaceShouldIgnoreNonWhitespaceValues()
+        {
+            Assert.DoesNotThrow(() => Verify.NotWhiteSpace("a", "obj"));
+        }
 
-  public class WhenVerifyingNotWhitespace
-  {
-    [Fact]
-    public void NotWhiteSpaceShouldIgnoreNonWhitespaceValues()
-    {
-      Assert.DoesNotThrow(() => Verify.NotWhiteSpace("a", "obj"));
+        [Theory, InlineData(null), InlineData(""), InlineData(" "), InlineData("\r\n")]
+        public void NotWhiteSpaceShouldThrowArgumentExceptionOnNullValues(String value)
+        {
+            Assert.Throws<ArgumentException>(() => Verify.NotWhiteSpace(value, "obj"));
+        }
     }
-
-    [Theory, InlineData(null), InlineData(""), InlineData(" "), InlineData("\r\n")]
-    public void NotWhiteSpaceShouldThrowArgumentExceptionOnNullValues(String value)
-    {
-      Assert.Throws<ArgumentException>(() => Verify.NotWhiteSpace(value, "obj"));
-    }
-  }
 }

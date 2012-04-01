@@ -13,77 +13,77 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OU
 IN THE SOFTWARE. 
 */
 if (!this.assert) {
-  this.assert = {};
+    this.assert = {};
 
-  (function (assert) {
-    assert.fail = function (message) {
-      throw message || "assert.fail.";
-    };
+    (function (assert) {
+        assert.fail = function (message) {
+            throw message || "assert.fail.";
+        };
 
-    assert.isTrue = function (expression, message) {
-      if (!expression) {
-        throw message || "assert.isTrue failed.";
-      }
-    };
+        assert.isTrue = function (expression, message) {
+            if (!expression) {
+                throw message || "assert.isTrue failed.";
+            }
+        };
 
-    assert.isFalse = function (expression, message) {
-      if (expression) {
-        throw message || "assert.isFalse failed.";
-      }
-    };
+        assert.isFalse = function (expression, message) {
+            if (expression) {
+                throw message || "assert.isFalse failed.";
+            }
+        };
 
-    assert.isNull = function (actual, message) {
-      if (actual !== null) {
-        throw message || "assert.isNull failed.";
-      }
-    };
+        assert.isNull = function (actual, message) {
+            if (actual !== null) {
+                throw message || "assert.isNull failed.";
+            }
+        };
 
-    assert.isNotNull = function (actual, message) {
-      if (actual === null) {
-        throw message || "assert.isNotNull failed.";
-      }
-    };
+        assert.isNotNull = function (actual, message) {
+            if (actual === null) {
+                throw message || "assert.isNotNull failed.";
+            }
+        };
 
-    assert.isUndefined = function (actual, message) {
-      if (actual !== undefined) {
-        throw message || "assert.isUndefined failed.";
-      }
-    };
+        assert.isUndefined = function (actual, message) {
+            if (actual !== undefined) {
+                throw message || "assert.isUndefined failed.";
+            }
+        };
 
-    assert.isNotUndefined = function (actual, message) {
-      if (actual === undefined) {
-        throw message || "assert.isNotUndefined failed.";
-      }
-    };
+        assert.isNotUndefined = function (actual, message) {
+            if (actual === undefined) {
+                throw message || "assert.isNotUndefined failed.";
+            }
+        };
 
-    assert.equal = function (expected, actual, message) {
-      if (expected !== actual && JSON.stringify(expected) !== JSON.stringify(actual)) {
-        throw message || "assert.equal failed. Expected <" + JSON.stringify(expected) + ">. Actual <" + JSON.stringify(actual) + ">.";
-      }
-    };
+        assert.equal = function (expected, actual, message) {
+            if (expected !== actual && JSON.stringify(expected) !== JSON.stringify(actual)) {
+                throw message || "assert.equal failed. Expected <" + JSON.stringify(expected) + ">. Actual <" + JSON.stringify(actual) + ">.";
+            }
+        };
 
-    assert.notEqual = function (notExpected, actual, message) {
-      if (notExpected === actual || JSON.stringify(notExpected) === JSON.stringify(actual)) {
-        throw message || "assert.notEqual failed. Expected any value except <" + JSON.stringify(notExpected) + ">. Actual <" + JSON.stringify(actual) + ">.";
-      }
-    };
+        assert.notEqual = function (notExpected, actual, message) {
+            if (notExpected === actual || JSON.stringify(notExpected) === JSON.stringify(actual)) {
+                throw message || "assert.notEqual failed. Expected any value except <" + JSON.stringify(notExpected) + ">. Actual <" + JSON.stringify(actual) + ">.";
+            }
+        };
 
-    assert.throws = function (expected, action, message) {
-      var exceptionNotThrown = false;
-      try {
-        action();
+        assert.throws = function (expected, action, message) {
+            var exceptionNotThrown = false;
+            try {
+                action();
 
-        exceptionNotThrown = true;
-      }
-      catch (ex) {
-        if (JSON.stringify(ex) !== JSON.stringify(expected)) {
-          throw message || "assert.throws failed. Expected <" + JSON.stringify(expected) + ">. Actual <" + JSON.stringify(ex) + ">.";
-        }
-      }
+                exceptionNotThrown = true;
+            }
+            catch (ex) {
+                if (JSON.stringify(ex) !== JSON.stringify(expected)) {
+                    throw message || "assert.throws failed. Expected <" + JSON.stringify(expected) + ">. Actual <" + JSON.stringify(ex) + ">.";
+                }
+            }
 
-      if (exceptionNotThrown) {
-        throw message || "assert.throws failed. No exception was thrown.";
-      }
-    };
-  })(this.assert);
+            if (exceptionNotThrown) {
+                throw message || "assert.throws failed. No exception was thrown.";
+            }
+        };
+    })(this.assert);
 }

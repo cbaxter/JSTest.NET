@@ -17,26 +17,26 @@ using System.IO;
 
 namespace JSTest.Test
 {
-  internal class TempFile : IDisposable
-  {
-    private readonly String _fileName;
-
-    public String FileName { get { return _fileName; } }
-
-    public TempFile()
-      : this("tmp")
-    { }
-
-    public TempFile(String extension)
+    internal class TempFile : IDisposable
     {
-      _fileName = Path.ChangeExtension(Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString()), extension);
+        private readonly String _fileName;
 
-      File.AppendAllText(_fileName, String.Empty);
-    }
+        public String FileName { get { return _fileName; } }
 
-    public void Dispose()
-    {
-      File.Delete(_fileName);
+        public TempFile()
+            : this("tmp")
+        { }
+
+        public TempFile(String extension)
+        {
+            _fileName = Path.ChangeExtension(Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString()), extension);
+
+            File.AppendAllText(_fileName, String.Empty);
+        }
+
+        public void Dispose()
+        {
+            File.Delete(_fileName);
+        }
     }
-  }
 }

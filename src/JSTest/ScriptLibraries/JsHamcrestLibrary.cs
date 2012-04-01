@@ -16,10 +16,10 @@
 
 namespace JSTest.ScriptLibraries
 {
-  public sealed class JsHamcrestLibrary : EmbeddedScriptBlock
-  {
-    public JsHamcrestLibrary()
-      : base(typeof(JsHamcrestLibrary).Assembly, "JSTest.Scripts.jshamcrest.js")
-    { }
-  }
+    public sealed class JsHamcrestLibrary : EmbeddedScriptBlock
+    {
+        public JsHamcrestLibrary()
+            : base(typeof(JsHamcrestLibrary).Assembly, "JSTest.Scripts.jshamcrest.js")
+        { }
+    }
 }
