@@ -84,7 +84,11 @@ namespace JSTest
                 if (proc.ExitCode == 0)
                     return standardOutput.ToString();
 
-                throw new ScriptException(standardOutput.ToString());
+                error = standardOutput.ToString();
+                if (String.IsNullOrEmpty(error))
+                    error = String.Format("{{\"message\":\"Unknown error\",\"number\":{0},\"description\":\"Unknown error\"}}", proc.ExitCode);
+
+                throw new ScriptException(error);
             }
         }
     }
