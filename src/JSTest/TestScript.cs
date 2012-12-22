@@ -89,7 +89,7 @@ namespace JSTest
             {
                 using (var writer = new StreamWriter(scriptFile))
                 {
-                    writer.WriteLine(String.Format("<job id='UnitTest'>"));
+                    writer.WriteLine("<job id='UnitTest'>");
                     writer.Write(this);
                     writer.WriteLine(new JsonLibrary());
                     writer.WriteLine(testExecutor);

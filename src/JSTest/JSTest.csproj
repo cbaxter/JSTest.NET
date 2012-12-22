@@ -42,6 +42,7 @@
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
     <Compile Include="CScriptCommand.cs" />
+    <Compile Include="CScriptError.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScriptElements\EmbeddedScriptBlock.cs" />
     <Compile Include="ScriptElements\MissingEmbeddedResourceException.cs" />
