@@ -24,8 +24,11 @@ namespace JSTest.ScriptElements
     WScript.Echo(JSON.stringify((function () {{
       // START TEST BLOCK //
 {0}
+try {{
 {1}
+}} finally {{
 {2}
+}}
       // END TEST BLOCK //
       return null;
     }})()));

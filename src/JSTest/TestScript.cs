@@ -71,17 +71,22 @@ namespace JSTest
 
         public String RunTest(TestCase testCase)
         {
+            return RunTest(testCase, NoAction, NoAction);
+        }
+
+        public String RunTest(TestCase testCase, String setup, String teardown)
+        {
             Verify.NotNull(testCase, "testCase");
 
-            return RunTest(testCase.ToScriptFragment());
+            return RunTest(testCase.ToScriptFragment(), setup, teardown);
         }
 
         public String RunTest(String testScript)
         {
-            return RunTest(new TestExecutor(IncludeDefaultBreakpoint ? Breakpoint : NoAction, testScript, NoAction));
+            return RunTest(testScript, NoAction, NoAction);
         }
 
-        private String RunTest(TestExecutor testExecutor)
+        public String RunTest(String testScript, String setup, String teardown)
         {
             String scriptFile = Path.ChangeExtension(Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString()), ".wsf");
 
@@ -92,7 +97,7 @@ namespace JSTest
                     writer.WriteLine("<job id='UnitTest'>");
                     writer.Write(this);
                     writer.WriteLine(new JsonLibrary());
-                    writer.WriteLine(testExecutor);
+                    writer.WriteLine(CreateExecutor(setup, testScript, teardown));
                     writer.WriteLine("</job>");
                 }
 
@@ -102,6 +107,17 @@ namespace JSTest
             {
                 File.Delete(scriptFile);
             }
+        }
+
+        private TestExecutor CreateExecutor(String setup, String testScript, String teardown)
+        {
+            setup = (setup ?? NoAction).Trim();
+            teardown = (teardown ?? NoAction).Trim();
+
+            if (IncludeDefaultBreakpoint)
+                setup = Breakpoint + (String.IsNullOrEmpty(setup) ? NoAction : Environment.NewLine + setup);
+
+            return new TestExecutor(setup, testScript, teardown);
         }
 
         public override string ToString()
