@@ -5,7 +5,7 @@
         <version>0.0.0</version>
         <owners>Chris Baxter</owners>
         <authors>Chris Baxter</authors>
-        <copyright>Copyright 2011</copyright>
+        <copyright>Copyright 2013</copyright>
         <tags>javascript xunit nunit mstest unit-testing tdd wscript cscript</tags>
         <summary>Browserless JavaScript Unit Test Runner</summary>
         <projectUrl>https://github.com/cbaxter/JSTest.NET</projectUrl>

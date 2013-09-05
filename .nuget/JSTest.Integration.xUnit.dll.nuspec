@@ -5,7 +5,7 @@
         <version>0.0.0</version>
         <owners>Chris Baxter</owners>
         <authors>Chris Baxter</authors>
-        <copyright>Copyright 2011</copyright>
+        <copyright>Copyright 2013</copyright>
         <tags>javascript xunit unit-testing tdd wscript cscript</tags>
         <summary>Browserless JavaScript Unit Test Runner for xUnit</summary>
         <projectUrl>https://github.com/cbaxter/JSTest.NET</projectUrl>
@@ -13,9 +13,9 @@
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>JSTest.NET is a lightweight managed wrapper around the Windows Script Host (CScript.exe) available on any Windows machine. JSTest.NET enables JavaScript unit tests to be run directly in the test framework of your choice (MSTest, NUnit, xUnit, etc) without the need for a web browser. JSTest.NET is focused on testing JavaScript, and NOT on UI validation.</description>
         <dependencies>
-            <dependency id="JSTest.NET" version="1.0.7" />
-            <dependency id="xunit" version="1.9.1" />
-            <dependency id="xunit.extensions" version="1.9.1" />
+            <dependency id="JSTest.NET" version="1.1.0" />
+            <dependency id="xunit" version="1.9.2" />
+            <dependency id="xunit.extensions" version="1.9.2" />
         </dependencies>
     </metadata>
 </package>
